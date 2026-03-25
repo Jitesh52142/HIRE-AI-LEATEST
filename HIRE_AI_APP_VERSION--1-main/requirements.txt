@@ -1,0 +1,9 @@
+Flask
+python-dotenv
+Flask-PyMongo
+Flask-Login
+Flask-Bcrypt
+pandas
+requests
+gunicorn
+numpy

@@ -1,0 +1,44 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Contact Us - Hire AI{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-5">
+            <h1 class="mb-4 text-primary">Get in Touch</h1>
+            <p class="lead">We'd love to hear from you. Fill out the form below or contact us directly.</p>
+            
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h3 class="text-secondary">Contact Information</h3>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2 text-primary"></i> <a href="mailto:info@hire-ai.com" class="text-decoration-none">info@hire-ai.com</a></li>
+                        <li><i class="fas fa-phone me-2 text-primary"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt me-2 text-primary"></i> 123 AI Boulevard, Silicon Valley, CA 90210</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <form method="POST" action="{{ url_for('main.contact') }}">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

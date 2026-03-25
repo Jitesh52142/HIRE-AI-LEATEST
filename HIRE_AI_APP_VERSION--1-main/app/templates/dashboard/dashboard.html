@@ -1,0 +1,123 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Dashboard - Hire AI{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="mb-0">Create New Hiring Request</h2>
+            <p class="mb-0">Complete the steps below to find your ideal candidate.</p>
+        </div>
+        <div class="card-body p-4 p-md-5">
+            <form id="multiStepForm" method="POST" action="{{ url_for('dashboard.main_dashboard') }}">
+                
+                <div class="form-step active">
+                    <h4 class="mb-4 text-secondary">Step 1: Company Details</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6"><input type="text" class="form-control" name="CompanyName" placeholder="Company Name" required></div>
+                        <div class="col-md-6"><input type="url" class="form-control" name="CompanyWebsite" placeholder="Company Website" required></div>
+                        <div class="col-12"><input type="text" class="form-control" name="CompanyAddress" placeholder="Company Address" required></div>
+                        <div class="col-12"><input type="text" class="form-control" name="CompanyIndustry" placeholder="Company Industry" required></div>
+                        <div class="col-12"><textarea class="form-control" name="CompanyDescriptionAndMission" rows="3" placeholder="Company Description & Mission" required></textarea></div>
+                        <div class="col-12"><textarea class="form-control" name="CompanyCultureAndValues" rows="3" placeholder="Company Culture & Values" required></textarea></div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="button" class="btn btn-secondary next-btn">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <h4 class="mb-4 text-secondary">Step 2: HR Contact Details</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6"><input type="text" class="form-control" name="fullName" placeholder="Full Name" required></div>
+                        <div class="col-md-6"><input type="text" class="form-control" name="hrTitle" placeholder="HR Title / Position" required></div>
+                        <div class="col-md-6"><input type="email" class="form-control" name="hrEmail" placeholder="HR Email" required></div>
+                        <div class="col-md-6"><input type="tel" class="form-control" name="hrPhone" placeholder="HR Phone" required></div>
+                        <div class="col-md-6"><input type="url" class="form-control" name="hrLinkedIn" placeholder="HR LinkedIn Profile URL"></div>
+                        <div class="col-md-6"><input type="text" class="form-control" name="preferredTimezone" placeholder="Preferred Timezone (e.g., IST, EST)"></div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-light prev-btn"><i class="fas fa-arrow-left me-2"></i> Previous</button>
+                        <button type="button" class="btn btn-secondary next-btn">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <h4 class="mb-4 text-secondary">Step 3: Candidate Requirements</h4>
+                     <div class="row g-3">
+                        <div class="col-md-6"><input type="text" class="form-control" name="PositionTitle" placeholder="Position Title" required></div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="Department" required>
+                                <option selected disabled value="">Select Department...</option>
+                                <option>Engineering</option><option>Sales</option><option>Marketing</option><option>Human Resources</option><option>Product</option><option>Design</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" name="JobType" required>
+                                <option selected disabled value="">Job Type...</option>
+                                <option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" name="WorkMode" required>
+                                <option selected disabled value="">Work Mode...</option>
+                                <option>On-site</option><option>Remote</option><option>Hybrid</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="Location" placeholder="Location (e.g., City, Country)" required></div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="ExperienceRequired" required>
+                                <option selected disabled value="">Experience Required...</option>
+                                <option>0-1 Years</option><option>1-3 Years</option><option>3-5 Years</option><option>5-8 Years</option><option>8+ Years</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="HiringUrgency" required>
+                                <option selected disabled value="">Hiring Urgency...</option>
+                                <option>Immediate</option><option>Within 1 month</option><option>Within 3 months</option><option>Flexible</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12"><label class="form-label small text-muted">Expected Start Date</label><input type="date" class="form-control" name="ExpectedStartDate" required></div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-light prev-btn"><i class="fas fa-arrow-left me-2"></i> Previous</button>
+                        <button type="button" class="btn btn-secondary next-btn">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <h4 class="mb-4 text-secondary">Step 4: Compensation & Skills</h4>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <select class="form-select" name="Currency" required>
+                                <option selected disabled value="">Currency...</option>
+                                <option>USD</option><option>INR</option><option>EUR</option><option>GBP</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"><input type="number" class="form-control" name="MinimumSalary" placeholder="Minimum Salary" required></div>
+                        <div class="col-md-4"><input type="number" class="form-control" name="MaximumSalary" placeholder="Maximum Salary" required></div>
+                        <div class="col-12">
+                            <select class="form-select" name="EducationRequirements" required>
+                                <option selected disabled value="">Education Requirements...</option>
+                                <option>High School</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>PhD</option><option>Not Required</option>
+                            </select>
+                        </div>
+                        <div class="col-12"><textarea class="form-control" name="RequiredSkillsAndExperience" rows="4" placeholder="Required Skills & Experience (one per line)" required></textarea></div>
+                        <div class="col-12"><textarea class="form-control" name="KeyResponsibilities" rows="4" placeholder="Key Responsibilities (one per line)" required></textarea></div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-light prev-btn"><i class="fas fa-arrow-left me-2"></i> Previous</button>
+                        <button type="submit" class="btn btn-success submit-btn"><i class="fas fa-paper-plane me-2"></i> Submit Request</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

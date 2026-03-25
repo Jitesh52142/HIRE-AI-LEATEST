@@ -1,0 +1,34 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Response Score - Hire AI{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h1 class="mb-0">Candidate Response Score</h1>
+        </div>
+        <div class="card-body p-4 p-md-5">
+            {% if candidate %}
+                <h3 class="mb-4 text-secondary">{{ candidate.get('name', 'N/A') }}</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            {% for col in columns %}
+                                <tr>
+                                    <th scope="row" class="w-25">{{ col }}</th>
+                                    <td>{{ candidate.get(col, 'N/A') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    No detailed response score found for this candidate.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

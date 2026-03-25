@@ -1,0 +1,33 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Hire AI - Your AI-Powered Hiring Partner{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center bg-light p-5 rounded-3 shadow-sm">
+    <h1 class="display-4 fw-bold text-primary">Hire AI: The Future of Recruitment</h1>
+    <p class="lead">Connect with the perfect candidates effortlessly. Our AI-driven platform analyzes vast databases to find and score talent that perfectly matches your company's needs.</p>
+    {% if not current_user.is_authenticated %}
+    <hr class="my-4">
+    <p>Ready to revolutionize your hiring? Get started today.</p>
+    <a class="btn btn-primary btn-lg mt-3" href="{{ url_for('auth.register') }}" role="button">Start Your Free Trial</a>
+    {% else %}
+    <a class="btn btn-primary btn-lg mt-3" href="{{ url_for('dashboard.main_dashboard') }}" role="button">Go to Dashboard</a>
+    {% endif %}
+</div>
+
+<div class="container my-5 text-center">
+    <h2 class="mb-4 text-secondary">Our AI Analyzes Candidates From Top Job Portals</h2>
+    <p class="text-muted">Hire AI aggregates and scores profiles from the most influential platforms.</p>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 mt-3">
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-indeed.png') }}" alt="Indeed" class="img-fluid portal-logo"></div>
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-linkedin.png') }}" alt="LinkedIn" class="img-fluid portal-logo"></div>
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-glassdoor.png') }}" alt="Glassdoor" class="img-fluid portal-logo"></div>
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-ziprecruiter.png') }}" alt="ZipRecruiter" class="img-fluid portal-logo"></div>
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-monster.png') }}" alt="Monster" class="img-fluid portal-logo"></div>
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-careerbuilder.png') }}" alt="CareerBuilder" class="img-fluid portal-logo"></div>
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-stackoverflow.png') }}" alt="Stack Overflow" class="img-fluid portal-logo"></div>
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-naukri.png') }}" alt="Naukri" class="img-fluid portal-logo"></div>
+        <div class="col"><img src="{{ url_for('static', filename='images/3d-angelist.png') }}" alt="Angelist" class="img-fluid portal-logo"></div>
+    </div>
+</div>
+{% endblock %}
