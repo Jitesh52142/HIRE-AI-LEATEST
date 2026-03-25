@@ -4,10 +4,10 @@
 
 {% block content %}
 <div class="container my-5">
-    <div class="card shadow-lg border-0">
-        <div class="card-header bg-primary text-white text-center">
-            <h2 class="mb-0">Create New Hiring Request</h2>
-            <p class="mb-0">Complete the steps below to find your ideal candidate.</p>
+    <div class="card shadow-lg border-0 glass-card">
+        <div class="card-header text-center pt-4 pb-3">
+            <h2 class="mb-2 text-white"><i class="fas fa-file-contract text-primary me-2"></i> Create New Hiring Request</h2>
+            <p class="mb-0 text-muted">Complete the steps below to find your ideal candidate with AI precision.</p>
         </div>
         <div class="card-body p-4 p-md-5">
             <form id="multiStepForm" method="POST" action="{{ url_for('dashboard.main_dashboard') }}">
