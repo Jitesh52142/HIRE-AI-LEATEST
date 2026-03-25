@@ -1,0 +1,141 @@
+﻿.\venv\Scripts\python : Traceback (most recent call last):
+At line:1 char:1
++ .\venv\Scripts\python run.py > error2.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\run.py", line 3, in <module>
+    app = create_app()
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\app\__init__.py", line 51, in create_app
+    create_admin_user_if_not_exists()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\app\__init__.py", line 65, in 
+create_admin_user_if_not_exists
+    if not mongo.db.users.find_one({'email': admin_email}):
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\collection.py", line 1755, in find_one
+    for result in cursor.limit(-1):
+                  ~~~~~~~~~~~~^^^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\cursor.py", line 1289, in __next__
+    return self.next()
+           ~~~~~~~~~^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\cursor.py", line 1265, in next
+    if len(self._data) or self._refresh():
+                          ~~~~~~~~~~~~~^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\cursor.py", line 1213, in _refresh
+    self._send_message(q)
+    ~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\cursor.py", line 1108, in _send_message
+    response = client._run_operation(
+        operation, self._unpack_response, address=self._address
+    )
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\_csot.py", 
+line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\mongo_client.py", line 1938, in _run_operation
+    return self._retryable_read(
+           ~~~~~~~~~~~~~~~~~~~~^
+        _cmd,
+        ^^^^^
+    ...<4 lines>...
+        operation=operation.name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\mongo_client.py", line 2048, in _retryable_read
+    return self._retry_internal(
+           ~~~~~~~~~~~~~~~~~~~~^
+        func,
+        ^^^^^
+    ...<7 lines>...
+        operation_id=operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\_csot.py", 
+line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\mongo_client.py", line 2014, in _retry_internal
+    ).run()
+      ~~~^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\mongo_client.py", line 2763, in run
+    return self._read() if self._is_read else self._write()
+           ~~~~~~~~~~^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\mongo_client.py", line 2910, in _read
+    with self._client._conn_from_server(self._read_pref, self._server, self._session) as (
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\mongo_client.py", line 1867, in _conn_from_server
+    with self._checkout(server, session) as conn:
+         ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\mongo_client.py", line 1777, in _checkout
+    with server.checkout(handler=err_handler) as conn:
+         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\pool.py", line 1101, in checkout
+    conn = self._get_conn(checkout_started_time, handler=handler)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\pool.py", line 1263, in _get_conn
+    conn = self.connect(handler=handler)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\pool.py", line 1055, in connect
+    conn.authenticate()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\pool.py", line 510, in authenticate
+    auth.authenticate(creds, self, reauthenticate=reauthenticate)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\auth.py", line 450, in authenticate
+    auth_func(credentials, conn)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\auth.py", line 355, in _authenticate_default
+    return _authenticate_scram(credentials, conn, "SCRAM-SHA-1")
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\auth.py", line 135, in _authenticate_scram
+    res = conn.command(source, cmd)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\helpers.py", line 47, in inner
+    return func(*args, **kwargs)
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\pool.py", line 398, in command
+    return command(
+        self,
+    ...<20 lines>...
+        write_concern=write_concern,
+    )
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\synchronous
+\network.py", line 212, in command
+    helpers_shared._check_command_response(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        response_doc,
+        ^^^^^^^^^^^^^
+    ...<2 lines>...
+        parse_write_concern_error=parse_write_concern_error,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\jitesh.bawaskar\Downloads\HIRE_AI_APP_VERSION--1-main\HIRE_AI_APP_VERSION--1-main\venv\Lib\site-packages\pymongo\helpers_sha
+red.py", line 284, in _check_command_response
+    raise OperationFailure(errmsg, code, response, max_wire_version)
+pymongo.errors.OperationFailure: bad auth : authentication failed, full error: {'ok': 0, 'errmsg': 'bad auth : authentication failed', 
+'code': 8000, 'codeName': 'AtlasError'}

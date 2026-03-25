@@ -48,7 +48,10 @@ def create_app(config_class=Config):
 
     with app.app_context():
         # Create a default admin user if one doesn't exist
-        create_admin_user_if_not_exists()
+        try:
+            create_admin_user_if_not_exists()
+        except Exception as e:
+            print(f"Warning: Failed to create or verify admin user during startup: {e}")
 
     return app
 
