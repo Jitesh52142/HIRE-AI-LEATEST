@@ -1,180 +1,18 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}Dashboard - Hire AI{% endblock %}
+{% block title %}Launch Campaign - Hire AI{% endblock %}
 
-{% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <div class="card shadow-2xl overflow-hidden" data-aos="zoom-in">
-            <div class="card-header bg-gradient-primary text-center py-5">
-                <i class="fas fa-file-contract fs-1 mb-3 text-primary"></i>
-                <h2 class="mb-0 fw-800">Recruitment Campaign</h2>
-                <p class="text-muted mt-2">Specify your ideal candidate profile and let our AI do the rest.</p>
-            </div>
-            
-            <div class="card-body p-4 p-md-5">
-                <!-- Progress Stepper -->
-                <div class="stepper mb-5 d-flex justify-content-between">
-                    <div class="step-item active" data-step="1">1</div>
-                    <div class="step-item" data-step="2">2</div>
-                    <div class="step-item" data-step="3">3</div>
-                    <div class="step-item" data-step="4">4</div>
-                </div>
-
-                <form id="multiStepForm" method="POST" action="{{ url_for('dashboard.main_dashboard') }}" class="modern-form">
-                    
-                    <!-- Step 1: Company Details -->
-                    <div class="form-step active" id="step-1">
-                        <div class="step-header mb-4">
-                            <span class="badge bg-primary px-3 mb-2">Phase 1: Foundation</span>
-                            <h4 class="fw-bold">Company Profile</h4>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label class="form-label">Company Name</label>
-                                    <input type="text" class="form-control" name="CompanyName" placeholder="e.g. Acme Corp" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label class="form-label">Official Website</label>
-                                    <input type="url" class="form-control" name="CompanyWebsite" placeholder="https://acme.com" required>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="premium-input-group">
-                                    <label class="form-label">Headquarters Address</label>
-                                    <input type="text" class="form-control" name="CompanyAddress" placeholder="City, Country" required>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="premium-input-group">
-                                    <label class="form-label">Mission & Vision</label>
-                                    <textarea class="form-control" name="CompanyDescriptionAndMission" rows="3" placeholder="What drives your company?" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end mt-5">
-                            <button type="button" class="btn btn-primary px-5 py-3 next-btn shadow-lg">
-                                <span>Continue</span>
-                                <i class="fas fa-chevron-right ms-2"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: HR Contact -->
-                    <div class="form-step" id="step-2">
-                        <div class="step-header mb-4">
-                            <span class="badge bg-primary px-3 mb-2">Phase 2: Contact</span>
-                            <h4 class="fw-bold">Hiring Lead</h4>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" name="fullName" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label class="form-label">Position Title</label>
-                                    <input type="text" class="form-control" name="hrTitle" placeholder="e.g. Talent Acquisition" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label class="form-label">Work Email</label>
-                                    <input type="email" class="form-control" name="hrEmail" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" name="hrPhone" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-5">
-                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
-                            <button type="button" class="btn btn-primary px-5 py-3 next-btn shadow-lg">Next <i class="fas fa-chevron-right ms-2"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Candidate -->
-                    <div class="form-step" id="step-3">
-                        <div class="step-header mb-4">
-                            <span class="badge bg-primary px-3 mb-2">Phase 3: Search</span>
-                            <h4 class="fw-bold">Candidate Requirements</h4>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-md-8">
-                                <label class="form-label">Role Title</label>
-                                <input type="text" class="form-control" name="PositionTitle" placeholder="e.g. Senior Backend Engineer" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Department</label>
-                                <select class="form-select" name="Department" required>
-                                    <option>Engineering</option><option>Product</option><option>Design</option><option>Sales</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Job Type</label>
-                                <select class="form-select" name="JobType" required>
-                                    <option>Full-time</option><option>Contract</option><option>Remote</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Experience</label>
-                                <select class="form-select" name="ExperienceRequired" required>
-                                    <option>1-3 Years</option><option>3-5 Years</option><option>5-8 Years</option><option>8+ Years</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Primary Skills (One per line)</label>
-                                <textarea class="form-control" name="RequiredSkillsAndExperience" rows="4" required></textarea>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-5">
-                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
-                            <button type="button" class="btn btn-primary px-5 py-3 next-btn shadow-lg">Next <i class="fas fa-chevron-right ms-2"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Step 4: Finalize -->
-                    <div class="form-step" id="step-4">
-                        <div class="step-header mb-4 text-center">
-                            <div class="rocket-icon mb-3"><i class="fas fa-bolt fs-1 text-primary"></i></div>
-                            <h4 class="fw-bold">Ready to Start AI Analysis?</h4>
-                            <p class="text-muted">Once submitted, our agents will start building the talent matching model.</p>
-                        </div>
-                        <div class="d-flex justify-content-between mt-5">
-                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
-                            <button type="submit" class="btn btn-primary px-5 py-3 shadow-lg hover-glow">
-                                <i class="fas fa-paper-plane me-2"></i> Submit & Launch Campaign
-                            </button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
+{% block styles %}
 <style>
 .stepper { counter-reset: step; }
 .step-item {
     width: 40px; height: 40px; border-radius: 50%;
-    background: var(--glass-border);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; color: var(--text-muted);
-    position: relative; z-index: 1;
+    background: var(--glass-border); display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: var(--text-muted); position: relative; z-index: 1;
 }
 .step-item.active { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary-glow); }
 .step-item:not(:last-child)::after {
-    content: ''; position: absolute;
-    width: calc(100% + 40px); height: 2px;
+    content: ''; position: absolute; width: calc(100% + 40px); height: 2px;
     background: var(--glass-border); left: 40px; z-index: -1;
 }
 .form-step { display: none; animation: slideIn 0.5s ease; }
@@ -187,9 +25,250 @@
 .card-header.bg-gradient-primary {
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
 }
-.hover-glow:hover { box-shadow: 0 0 20px var(--primary-glow) !important; }
+.premium-input-group { margin-bottom: 1.5rem; }
+.premium-input-group label { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
 </style>
+{% endblock %}
 
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-lg-10">
+        <div class="card shadow-2xl overflow-hidden glass-card" data-aos="zoom-in">
+            <div class="card-header bg-gradient-primary text-center py-5">
+                <i class="fas fa-paper-plane fs-1 mb-3 text-primary"></i>
+                <h2 class="mb-0 fw-800">Recruitment Campaign Engine</h2>
+                <p class="text-muted mt-2">Deploy AI agents to find your next great hire.</p>
+            </div>
+            
+            <div class="card-body p-4 p-md-5">
+                <!-- Progress Stepper -->
+                <div class="stepper mb-5 d-flex justify-content-between">
+                    <div class="step-item active" data-step="1">1</div>
+                    <div class="step-item" data-step="2">2</div>
+                    <div class="step-item" data-step="3">3</div>
+                    <div class="step-item" data-step="4">4</div>
+                    <div class="step-item" data-step="5">5</div>
+                </div>
+
+                <form id="multiStepForm" method="POST" action="{{ url_for('dashboard.main_dashboard') }}" class="modern-form">
+                    
+                    <!-- Step 1: Company Profile -->
+                    <div class="form-step active" id="step-1">
+                        <div class="step-header mb-4">
+                            <span class="badge bg-primary px-3 mb-2">Phase 1: Company</span>
+                            <h4 class="fw-bold">Tell us about your organization</h4>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="premium-input-group">
+                                    <label>Company Name</label>
+                                    <input type="text" class="form-control" name="CompanyName" placeholder="e.g. InnovaLogic Systems" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="premium-input-group">
+                                    <label>Company Website</label>
+                                    <input type="url" class="form-control" name="CompanyWebsite" placeholder="https://www.innovalogic.ai" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="premium-input-group">
+                                    <label>Office Address</label>
+                                    <input type="text" class="form-control" name="CompanyAddress" placeholder="Gurgaon, India" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="premium-input-group">
+                                    <label>Industry</label>
+                                    <input type="text" class="form-control" name="CompanyIndustry" placeholder="AI Automation / SaaS" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="premium-input-group">
+                                    <label>Description & Mission</label>
+                                    <textarea class="form-control" name="CompanyDescriptionAndMission" rows="2" placeholder="Building AI workflows..." required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="premium-input-group">
+                                    <label>Culture & Values</label>
+                                    <textarea class="form-control" name="CompanyCultureAndValues" rows="2" placeholder="Ownership, speed, creativity..." required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-5">
+                            <button type="button" class="btn btn-primary px-5 py-3 next-btn">Continue <i class="fas fa-chevron-right ms-2"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: HR Lead -->
+                    <div class="form-step" id="step-2">
+                        <div class="step-header mb-4">
+                            <span class="badge bg-primary px-3 mb-2">Phase 2: Contact</span>
+                            <h4 class="fw-bold">Process Stakeholder</h4>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label>Full Name</label>
+                                <input type="text" class="form-control" name="fullName" placeholder="Arjun Mehta" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>HR Title</label>
+                                <input type="text" class="form-control" name="hrTitle" placeholder="Talent Acquisition Lead" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Work Email</label>
+                                <input type="email" class="form-control" name="hrEmail" placeholder="arjun.mehta@innovalogic.ai" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Phone Number</label>
+                                <input type="tel" class="form-control" name="hrPhone" placeholder="+91 9812345678" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>LinkedIn URL</label>
+                                <input type="url" class="form-control" name="hrLinkedIn" placeholder="https://linkedin.com/..." required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Preferred Timezone</label>
+                                <input type="text" class="form-control" name="preferredTimezone" placeholder="IST (UTC+5:30)" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-5">
+                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
+                            <button type="button" class="btn btn-primary px-5 py-3 next-btn">Continue <i class="fas fa-chevron-right ms-2"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Job Requirements -->
+                    <div class="form-step" id="step-3">
+                        <div class="step-header mb-4">
+                            <span class="badge bg-primary px-3 mb-2">Phase 3: Role</span>
+                            <h4 class="fw-bold">The Position</h4>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label>Position Title</label>
+                                <input type="text" class="form-control" name="PositionTitle" placeholder="AI Automation Engineer" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Department</label>
+                                <input type="text" class="form-control" name="Department" placeholder="Engineering" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Job Type</label>
+                                <select class="form-select" name="JobType" required>
+                                    <option>Full-time</option><option>Contract</option><option>Part-time</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Work Mode</label>
+                                <select class="form-select" name="WorkMode" required>
+                                    <option>Remote</option><option>On-site</option><option>Hybrid</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Location</label>
+                                <input type="text" class="form-control" name="Location" placeholder="India" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Experience (Years)</label>
+                                <input type="text" class="form-control" name="ExperienceRequired" placeholder="0-2 years" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Education</label>
+                                <input type="text" class="form-control" name="EducationRequirements" placeholder="B.Tech CS / AI" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Expected Start Date</label>
+                                <input type="date" class="form-control" name="ExpectedStartDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Hiring Urgency</label>
+                                <select class="form-select" name="HiringUrgency" required>
+                                    <option>Immediate</option><option>Flexible</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-5">
+                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
+                            <button type="button" class="btn btn-primary px-5 py-3 next-btn">Continue <i class="fas fa-chevron-right ms-2"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Budget & Skills -->
+                    <div class="form-step" id="step-4">
+                        <div class="step-header mb-4">
+                            <span class="badge bg-primary px-3 mb-2">Phase 4: Compensation</span>
+                            <h4 class="fw-bold">Value & Expertise</h4>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <label>Currency</label>
+                                <input type="text" class="form-control" name="Currency" placeholder="INR" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Min Salary</label>
+                                <input type="number" class="form-control" name="MinimumSalary" placeholder="600000" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Max Salary</label>
+                                <input type="number" class="form-control" name="MaximumSalary" placeholder="900000" required>
+                            </div>
+                            <div class="col-12">
+                                <label>Required Skills (Comma separated)</label>
+                                <textarea class="form-control" name="RequiredSkillsAndExperience" rows="2" placeholder="Python, FastAPI, LangChain, n8n..." required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label>Key Responsibilities</label>
+                                <textarea class="form-control" name="KeyResponsibilities" rows="3" placeholder="Design automated pipelines..." required></textarea>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-5">
+                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
+                            <button type="button" class="btn btn-primary px-5 py-3 next-btn">Continue <i class="fas fa-chevron-right ms-2"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Final Review -->
+                    <div class="form-step" id="step-5">
+                        <div class="step-header mb-4">
+                            <span class="badge bg-primary px-3 mb-2">Phase 5: Launch</span>
+                            <h4 class="fw-bold">Additional Perks & Process</h4>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label>Nice to Have Skills</label>
+                                <input type="text" class="form-control" name="NiceToHaveSkills" placeholder="Docker, Kubernetes...">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Benefits & Perks</label>
+                                <input type="text" class="form-control" name="BenefitsAndPerks" placeholder="Remote-first, Learning stipend...">
+                            </div>
+                            <div class="col-12">
+                                <label>Interview Process</label>
+                                <input type="text" class="form-control" name="InterviewProcess" placeholder="HR Screening → Final Interview">
+                            </div>
+                        </div>
+                        <div class="review-box p-4 rounded-4 bg-light mt-5 text-center">
+                            <h5>Ready to send to AI Engine?</h5>
+                            <p class="text-muted small">This will trigger your n8n webhook for candidate scouting.</p>
+                            <button type="submit" class="btn btn-primary px-5 py-3 mt-3">
+                                <i class="fas fa-rocket me-2"></i> Launch Campaign
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-start mt-4">
+                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const steps = document.querySelectorAll('.form-step');
@@ -202,10 +281,10 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', () => {
             if (currentStep < steps.length - 1) {
                 steps[currentStep].classList.remove('active');
-                stepItems[currentStep].classList.remove('active');
+                if (stepItems[currentStep]) stepItems[currentStep].classList.remove('active');
                 currentStep++;
                 steps[currentStep].classList.add('active');
-                stepItems[currentStep].classList.add('active');
+                if (stepItems[currentStep]) stepItems[currentStep].classList.add('active');
             }
         });
     });
@@ -214,10 +293,10 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', () => {
             if (currentStep > 0) {
                 steps[currentStep].classList.remove('active');
-                stepItems[currentStep].classList.remove('active');
+                if (stepItems[currentStep]) stepItems[currentStep].classList.remove('active');
                 currentStep--;
                 steps[currentStep].classList.add('active');
-                stepItems[currentStep].classList.add('active');
+                if (stepItems[currentStep]) stepItems[currentStep].classList.add('active');
             }
         });
     });

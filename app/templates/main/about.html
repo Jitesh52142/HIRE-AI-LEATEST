@@ -3,36 +3,74 @@
 {% block title %}About Us - Hire AI{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="card shadow-lg border-0">
-        <div class="card-body p-5">
-            <h1 class="mb-4 text-primary">About Hire AI</h1>
-            <p class="lead">At Hire AI, we're not just building a product; we're creating a new standard for recruitment. Our mission is to empower companies of all sizes to make smarter, faster, and more informed hiring decisions using the power of artificial intelligence.</p>
-            
-            <hr class="my-4">
+<div class="row justify-content-center py-5">
+    <div class="col-lg-9">
+        <div class="header-section text-center mb-5" data-aos="fade-up">
+            <h1 class="fw-800 display-4 mb-3">Redefining Recruitment</h1>
+            <p class="text-muted fs-5 max-w-700 mx-auto">We're on a mission to bridge the gap between world-class talent and visionary companies using ethical AI.</p>
+        </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <h3 class="text-secondary">The Challenge</h3>
-                    <p>In the digital age, companies are overwhelmed with thousands of resumes for a single job opening. Manually sifting through this data is inefficient, biased, and often leads to a high rate of bad hires. The right candidate might be missed, not because they lack skills, but because their profile was buried in a sea of applications.</p>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <h3 class="text-secondary">The Hire AI Solution</h3>
-                    <p>Our platform leverages advanced AI to automate the most time-consuming parts of the hiring process. We analyze and score candidates based on a comprehensive set of criteria, including skills, experience, cultural fit, and potential. By integrating with leading job portals, we give you a unified, data-driven view of the best talent on the market.</p>
+        <div class="card border-0 shadow-2xl overflow-hidden glass-card mb-5" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-body p-5">
+                <div class="row align-items-center g-5">
+                    <div class="col-md-6">
+                        <h2 class="fw-bold mb-4 text-dark">The Challenge</h2>
+                        <p class="text-muted">In the digital age, companies are overwhelmed with thousands of resumes. Manual sifting is slow, prone to bias, and often lets top-tier talent slip through the cracks.</p>
+                        <div class="mt-4 p-4 rounded-4 bg-primary bg-opacity-5 border border-primary border-opacity-10">
+                            <i class="fas fa-quote-left text-primary mb-3 opacity-50"></i>
+                            <p class="mb-0 fw-600">"The right candidate might be missed simply because they were buried in a sea of applications."</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="about-stats-grid">
+                            <div class="about-stat-item">
+                                <div class="num text-primary">10x</div>
+                                <div class="lab">Faster Scouting</div>
+                            </div>
+                            <div class="about-stat-item">
+                                <div class="num text-primary">0%</div>
+                                <div class="lab">Bias in Initial Scoring</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <h3 class="text-secondary mt-4">How It Works</h3>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>1. You Define:</strong> You simply provide us with your company's details and the specific requirements for the position.</li>
-                <li class="list-group-item"><strong>2. AI Analyzes:</strong> Our AI engine scans millions of public profiles from job portals and social networks.</li>
-                <li class="list-group-item"><strong>3. We Present:</strong> We deliver a curated list of top-tier candidates, complete with a detailed score and insights into their suitability for your role.</li>
-                <li class="list-group-item"><strong>4. You Connect:</strong> You save time and resources, focusing only on connecting with the most promising candidates.</li>
-            </ul>
-
-            <h3 class="text-secondary mt-4">Our Commitment</h3>
-            <p>We are committed to building a tool that is not only powerful but also ethical. Our AI is designed to minimize bias, promoting diversity and inclusion in the workplace. We believe that technology should be a force for good, and we're dedicated to helping companies build stronger, more diverse teams.</p>
+        <div class="row g-4 mb-5">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card-small">
+                    <i class="fas fa-brain text-primary mb-3 fs-3"></i>
+                    <h5 class="fw-bold">Neural Matching</h5>
+                    <p class="text-muted small">Advanced AI that understands nuances beyond keywords in a resume.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card-small">
+                    <i class="fas fa-shield-heart text-primary mb-3 fs-3"></i>
+                    <h5 class="fw-bold">Ethical Focus</h5>
+                    <p class="text-muted small">Engineered to promote diversity and minimize unconscious bias.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-card-small">
+                    <i class="fas fa-bolt text-primary mb-3 fs-3"></i>
+                    <h5 class="fw-bold">Real-time Insights</h5>
+                    <p class="text-muted small">Live data syncing across all major professional networks.</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+.max-w-700 { max-width: 700px; }
+.about-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.about-stat-item { background: #fff; padding: 2rem; border-radius: 20px; border: 1px solid var(--glass-border); text-align: center; }
+.about-stat-item .num { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; }
+.about-stat-item .lab { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); }
+.feature-card-small { background: #fff; padding: 2rem; border-radius: 20px; border: 1px solid var(--glass-border); height: 100%; transition: var(--transition); }
+.feature-card-small:hover { transform: translateY(-5px); border-color: var(--primary); }
+.fw-600 { font-weight: 600; }
+</style>
 {% endblock %}

@@ -6,7 +6,13 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    return render_template('main/index.html')
+    # Fetch real stats from MongoDB
+    stats = {
+        'candidates': mongo.db.candidate_insights_cache.count_documents({}),
+        'submissions': mongo.db.form_submissions.count_documents({}),
+        'users': mongo.db.users.count_documents({})
+    }
+    return render_template('main/index.html', stats=stats)
 
 @main_bp.route('/about')
 def about():
