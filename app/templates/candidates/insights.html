@@ -219,121 +219,27 @@
 </div>
 
 {% else %}
-<!-- Display Wizard if no candidates -->
-<div class="wizard-container py-5">
-    <div class="wizard-progress-wrapper" data-aos="fade-down">
-        <div class="wizard-progress-bar">
-            <div class="wizard-progress-fill" id="progressFill"></div>
-        </div>
-        <div class="phase-indicator">
-            <span class="phase-item active" data-step="1">Company</span>
-            <span class="phase-item" data-step="2">HR Lead</span>
-            <span class="phase-item" data-step="3">Role</span>
-            <span class="phase-item" data-step="4">Compensation</span>
-            <span class="phase-item" data-step="5">Launch</span>
+<div class="row justify-content-center py-5">
+    <div class="col-lg-8 text-center" data-aos="zoom-in">
+        <div class="glass-card p-5 rounded-5 border border-primary border-opacity-10 shadow-3xl bg-white bg-opacity-70">
+            <div class="mb-4">
+                <i class="fas fa-rocket fs-1 text-primary pulse"></i>
+            </div>
+            <h2 class="fw-800 mb-3">No Active Campaign</h2>
+            <p class="text-muted fs-5 mb-5 mx-auto max-w-500">Deploy your first AI agent swarm to begin scouting for world-class talent matched to your specific needs.</p>
+            <a href="{{ url_for('dashboard.main_dashboard') }}" class="btn btn-primary px-5 py-3 rounded-pill fw-800 shadow-xl btn-launch-now transition-all">
+                <i class="fas fa-plus-circle me-2"></i> START NEW SETUP
+            </a>
         </div>
     </div>
-
-    <form id="multiPageWizard" method="POST" action="{{ url_for('dashboard.main_dashboard') }}">
-        <!-- Page 1 -->
-        <div class="card wizard-card form-page active" id="page1">
-            <div class="card-body p-4 p-md-5">
-                <span class="step-label-badge">Phase 01</span>
-                <h2 class="form-header-title">The Foundation</h2>
-                <p class="text-muted mb-4">Set the ground for your hiring campaign by detailing your company's core profile.</p>
-                <div class="row g-3">
-                    <div class="col-md-6"><div class="premium-input-group"><label>Company Name</label><input type="text" class="form-control" name="CompanyName" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Website</label><input type="url" class="form-control" name="CompanyWebsite" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Office Address</label><input type="text" class="form-control" name="CompanyAddress" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Industry</label><input type="text" class="form-control" name="CompanyIndustry" required></div></div>
-                    <div class="col-12"><div class="premium-input-group"><label>Description & Mission</label><textarea class="form-control" name="CompanyDescriptionAndMission" rows="2" required></textarea></div></div>
-                    <div class="col-12"><div class="premium-input-group"><label>Culture & Values</label><textarea class="form-control" name="CompanyCultureAndValues" rows="2" required></textarea></div></div>
-                </div>
-                <div class="d-flex justify-content-end mt-4"><button type="button" class="btn btn-wizard btn-next next-btn">Next: Stakeholder <i class="fas fa-arrow-right ms-2"></i></button></div>
-            </div>
-        </div>
-
-        <!-- Page 2 -->
-        <div class="card wizard-card form-page" id="page2">
-            <div class="card-body p-4 p-md-5">
-                <span class="step-label-badge">Phase 02</span>
-                <h2 class="form-header-title">Process Stakeholder</h2>
-                <p class="text-muted mb-4">Enter details of the main point of contact.</p>
-                <div class="row g-3">
-                    <div class="col-md-6"><div class="premium-input-group"><label>Full Name</label><input type="text" class="form-control" name="fullName" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Job Title</label><input type="text" class="form-control" name="hrTitle" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Work Email</label><input type="email" class="form-control" name="hrEmail" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Phone</label><input type="tel" class="form-control" name="hrPhone" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>LinkedIn</label><input type="url" class="form-control" name="hrLinkedIn" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Timezone</label><input type="text" class="form-control" name="preferredTimezone" required></div></div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" class="btn btn-wizard btn-prev prev-btn">Back</button>
-                    <button type="button" class="btn btn-wizard btn-next next-btn">Next: Role <i class="fas fa-arrow-right ms-2"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Page 3 -->
-        <div class="card wizard-card form-page" id="page3">
-            <div class="card-body p-4 p-md-5">
-                <span class="step-label-badge">Phase 03</span>
-                <h2 class="form-header-title">The Role</h2>
-                <div class="row g-3">
-                    <div class="col-md-6"><div class="premium-input-group"><label>Position Title</label><input type="text" class="form-control" name="PositionTitle" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Department</label><input type="text" class="form-control" name="Department" required></div></div>
-                    <div class="col-md-4"><div class="premium-input-group"><label>Job Type</label><select class="form-select" name="JobType"><option>Full-time</option><option>Contract</option></select></div></div>
-                    <div class="col-md-4"><div class="premium-input-group"><label>Work Mode</label><select class="form-select" name="WorkMode"><option>Remote</option><option>Hybrid</option></select></div></div>
-                    <div class="col-md-4"><div class="premium-input-group"><label>Location</label><input type="text" class="form-control" name="Location" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Experience</label><input type="text" class="form-control" name="ExperienceRequired" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Education</label><input type="text" class="form-control" name="EducationRequirements" required></div></div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" class="btn btn-wizard btn-prev prev-btn">Back</button>
-                    <button type="button" class="btn btn-wizard btn-next next-btn">Next: Skills <i class="fas fa-arrow-right ms-2"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Page 4 -->
-        <div class="card wizard-card form-page" id="page4">
-            <div class="card-body p-4 p-md-5">
-                <span class="step-label-badge">Phase 04</span>
-                <h2 class="form-header-title">Compensation & Expertise</h2>
-                <div class="row g-3">
-                    <div class="col-md-4"><div class="premium-input-group"><label>Currency</label><input type="text" class="form-control" name="Currency" required></div></div>
-                    <div class="col-md-4"><div class="premium-input-group"><label>Min Salary</label><input type="number" class="form-control" name="MinimumSalary" required></div></div>
-                    <div class="col-md-4"><div class="premium-input-group"><label>Max Salary</label><input type="number" class="form-control" name="MaximumSalary" required></div></div>
-                    <div class="col-12"><div class="premium-input-group"><label>Skills</label><textarea class="form-control" name="RequiredSkillsAndExperience" rows="2" required></textarea></div></div>
-                    <div class="col-12"><div class="premium-input-group"><label>Responsibilities</label><textarea class="form-control" name="KeyResponsibilities" rows="2" required></textarea></div></div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" class="btn btn-wizard btn-prev prev-btn">Back</button>
-                    <button type="button" class="btn btn-wizard btn-next next-btn">Next: Finalize <i class="fas fa-arrow-right ms-2"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Page 5 -->
-        <div class="card wizard-card form-page" id="page5">
-            <div class="card-body p-4 p-md-5">
-                <span class="step-label-badge">Phase 05</span>
-                <h2 class="form-header-title">Final Details</h2>
-                <div class="row g-3">
-                    <div class="col-md-6"><div class="premium-input-group"><label>Nice to Have Skills</label><input type="text" class="form-control" name="NiceToHaveSkills"></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Benefits</label><input type="text" class="form-control" name="BenefitsAndPerks"></div></div>
-                    <div class="col-12"><div class="premium-input-group"><label>Process Flow</label><input type="text" class="form-control" name="InterviewProcess"></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Start Date</label><input type="date" class="form-control" name="ExpectedStartDate" required></div></div>
-                    <div class="col-md-6"><div class="premium-input-group"><label>Urgency</label><select class="form-select" name="HiringUrgency"><option>Immediate</option><option>Flexible</option></select></div></div>
-                </div>
-                <div class="mt-4 p-4 rounded-4 bg-primary bg-opacity-5 text-center">
-                    <button type="submit" class="btn btn-wizard btn-next w-100 py-3">LAUNCH CAMPAIGN</button>
-                </div>
-                <div class="d-flex justify-content-start mt-4"><button type="button" class="btn btn-wizard btn-prev prev-btn">Back</button></div>
-            </div>
-        </div>
-    </form>
 </div>
+
+<style>
+.max-w-500 { max-width: 500px; }
+.btn-launch-now:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 40px -10px var(--primary-glow); }
+.pulse { animation: pulse 2s infinite; }
+@keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+</style>
 {% endif %}
 {% endblock %}
 
