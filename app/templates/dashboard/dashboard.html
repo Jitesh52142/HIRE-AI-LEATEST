@@ -4,302 +4,527 @@
 
 {% block styles %}
 <style>
-.stepper { counter-reset: step; }
-.step-item {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--glass-border); display: flex; align-items: center; justify-content: center;
-    font-weight: 700; color: var(--text-muted); position: relative; z-index: 1;
+/* Wizard Container and Flow Styling */
+.wizard-container {
+    max-width: 900px;
+    margin: 0 auto;
 }
-.step-item.active { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary-glow); }
-.step-item:not(:last-child)::after {
-    content: ''; position: absolute; width: calc(100% + 40px); height: 2px;
-    background: var(--glass-border); left: 40px; z-index: -1;
+
+.wizard-progress-wrapper {
+    margin-bottom: 2rem;
+    padding: 0 1rem;
 }
-.form-step { display: none; animation: slideIn 0.5s ease; }
-.form-step.active { display: block; }
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
+
+.wizard-progress-bar {
+    height: 8px;
+    background: var(--glass-border);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
 }
-.fw-800 { font-weight: 800; }
-.card-header.bg-gradient-primary {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+
+.wizard-progress-fill {
+    height: 100%;
+    background: var(--primary);
+    width: 20%; /* Initial width for step 1 */
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 15px var(--primary-glow);
 }
-.premium-input-group { margin-bottom: 1.5rem; }
-.premium-input-group label { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
+
+.phase-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.phase-item {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: var(--transition);
+}
+
+.phase-item.active {
+    color: var(--primary);
+}
+
+/* Page-like Step Styling */
+.form-page {
+    display: none;
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.form-page.active {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.wizard-card {
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+.step-label-badge {
+    background: var(--primary-bg);
+    color: var(--primary);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.btn-wizard {
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-next {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    box-shadow: 0 10px 20px -5px var(--primary-glow);
+}
+
+.btn-next:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px -5px var(--primary-glow);
+    color: #fff;
+}
+
+.btn-prev {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+}
+
+.btn-prev:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-main);
+}
+
+.premium-input-group {
+    margin-bottom: 1.8rem;
+}
+
+.premium-input-group label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+.premium-input-group .form-control, .premium-input-group .form-select {
+    padding: 14px 20px;
+    border-radius: 15px;
+    background: #fcfcfc;
+    border: 1px solid #eee;
+    font-weight: 500;
+    transition: border-color 0.3s ease;
+}
+
+.premium-input-group .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-bg);
+}
+
+.form-header-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+}
+
+.review-summary-item {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.review-summary-label {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    display: block;
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center py-5">
-    <div class="col-lg-10">
-        <div class="card shadow-2xl overflow-hidden glass-card" data-aos="zoom-in">
-            <div class="card-header bg-gradient-primary text-center py-5">
-                <i class="fas fa-paper-plane fs-1 mb-3 text-primary"></i>
-                <h2 class="mb-0 fw-800">Recruitment Campaign Engine</h2>
-                <p class="text-muted mt-2">Deploy AI agents to find your next great hire.</p>
-            </div>
-            
-            <div class="card-body p-4 p-md-5">
-                <!-- Progress Stepper -->
-                <div class="stepper mb-5 d-flex justify-content-between">
-                    <div class="step-item active" data-step="1">1</div>
-                    <div class="step-item" data-step="2">2</div>
-                    <div class="step-item" data-step="3">3</div>
-                    <div class="step-item" data-step="4">4</div>
-                    <div class="step-item" data-step="5">5</div>
-                </div>
-
-                <form id="multiStepForm" method="POST" action="{{ url_for('dashboard.main_dashboard') }}" class="modern-form">
-                    
-                    <!-- Step 1: Company Profile -->
-                    <div class="form-step active" id="step-1">
-                        <div class="step-header mb-4">
-                            <span class="badge bg-primary px-3 mb-2">Phase 1: Company</span>
-                            <h4 class="fw-bold">Tell us about your organization</h4>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label>Company Name</label>
-                                    <input type="text" class="form-control" name="CompanyName" placeholder="e.g. InnovaLogic Systems" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label>Company Website</label>
-                                    <input type="url" class="form-control" name="CompanyWebsite" placeholder="https://www.innovalogic.ai" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label>Office Address</label>
-                                    <input type="text" class="form-control" name="CompanyAddress" placeholder="Gurgaon, India" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="premium-input-group">
-                                    <label>Industry</label>
-                                    <input type="text" class="form-control" name="CompanyIndustry" placeholder="AI Automation / SaaS" required>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="premium-input-group">
-                                    <label>Description & Mission</label>
-                                    <textarea class="form-control" name="CompanyDescriptionAndMission" rows="2" placeholder="Building AI workflows..." required></textarea>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="premium-input-group">
-                                    <label>Culture & Values</label>
-                                    <textarea class="form-control" name="CompanyCultureAndValues" rows="2" placeholder="Ownership, speed, creativity..." required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end mt-5">
-                            <button type="button" class="btn btn-primary px-5 py-3 next-btn">Continue <i class="fas fa-chevron-right ms-2"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: HR Lead -->
-                    <div class="form-step" id="step-2">
-                        <div class="step-header mb-4">
-                            <span class="badge bg-primary px-3 mb-2">Phase 2: Contact</span>
-                            <h4 class="fw-bold">Process Stakeholder</h4>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label>Full Name</label>
-                                <input type="text" class="form-control" name="fullName" placeholder="Arjun Mehta" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>HR Title</label>
-                                <input type="text" class="form-control" name="hrTitle" placeholder="Talent Acquisition Lead" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Work Email</label>
-                                <input type="email" class="form-control" name="hrEmail" placeholder="arjun.mehta@innovalogic.ai" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Phone Number</label>
-                                <input type="tel" class="form-control" name="hrPhone" placeholder="+91 9812345678" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>LinkedIn URL</label>
-                                <input type="url" class="form-control" name="hrLinkedIn" placeholder="https://linkedin.com/..." required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Preferred Timezone</label>
-                                <input type="text" class="form-control" name="preferredTimezone" placeholder="IST (UTC+5:30)" required>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-5">
-                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
-                            <button type="button" class="btn btn-primary px-5 py-3 next-btn">Continue <i class="fas fa-chevron-right ms-2"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Job Requirements -->
-                    <div class="form-step" id="step-3">
-                        <div class="step-header mb-4">
-                            <span class="badge bg-primary px-3 mb-2">Phase 3: Role</span>
-                            <h4 class="fw-bold">The Position</h4>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label>Position Title</label>
-                                <input type="text" class="form-control" name="PositionTitle" placeholder="AI Automation Engineer" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Department</label>
-                                <input type="text" class="form-control" name="Department" placeholder="Engineering" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Job Type</label>
-                                <select class="form-select" name="JobType" required>
-                                    <option>Full-time</option><option>Contract</option><option>Part-time</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Work Mode</label>
-                                <select class="form-select" name="WorkMode" required>
-                                    <option>Remote</option><option>On-site</option><option>Hybrid</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Location</label>
-                                <input type="text" class="form-control" name="Location" placeholder="India" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Experience (Years)</label>
-                                <input type="text" class="form-control" name="ExperienceRequired" placeholder="0-2 years" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Education</label>
-                                <input type="text" class="form-control" name="EducationRequirements" placeholder="B.Tech CS / AI" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Expected Start Date</label>
-                                <input type="date" class="form-control" name="ExpectedStartDate" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Hiring Urgency</label>
-                                <select class="form-select" name="HiringUrgency" required>
-                                    <option>Immediate</option><option>Flexible</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-5">
-                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
-                            <button type="button" class="btn btn-primary px-5 py-3 next-btn">Continue <i class="fas fa-chevron-right ms-2"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Step 4: Budget & Skills -->
-                    <div class="form-step" id="step-4">
-                        <div class="step-header mb-4">
-                            <span class="badge bg-primary px-3 mb-2">Phase 4: Compensation</span>
-                            <h4 class="fw-bold">Value & Expertise</h4>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-md-4">
-                                <label>Currency</label>
-                                <input type="text" class="form-control" name="Currency" placeholder="INR" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Min Salary</label>
-                                <input type="number" class="form-control" name="MinimumSalary" placeholder="600000" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Max Salary</label>
-                                <input type="number" class="form-control" name="MaximumSalary" placeholder="900000" required>
-                            </div>
-                            <div class="col-12">
-                                <label>Required Skills (Comma separated)</label>
-                                <textarea class="form-control" name="RequiredSkillsAndExperience" rows="2" placeholder="Python, FastAPI, LangChain, n8n..." required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label>Key Responsibilities</label>
-                                <textarea class="form-control" name="KeyResponsibilities" rows="3" placeholder="Design automated pipelines..." required></textarea>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-5">
-                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
-                            <button type="button" class="btn btn-primary px-5 py-3 next-btn">Continue <i class="fas fa-chevron-right ms-2"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Step 5: Final Review -->
-                    <div class="form-step" id="step-5">
-                        <div class="step-header mb-4">
-                            <span class="badge bg-primary px-3 mb-2">Phase 5: Launch</span>
-                            <h4 class="fw-bold">Additional Perks & Process</h4>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label>Nice to Have Skills</label>
-                                <input type="text" class="form-control" name="NiceToHaveSkills" placeholder="Docker, Kubernetes...">
-                            </div>
-                            <div class="col-md-6">
-                                <label>Benefits & Perks</label>
-                                <input type="text" class="form-control" name="BenefitsAndPerks" placeholder="Remote-first, Learning stipend...">
-                            </div>
-                            <div class="col-12">
-                                <label>Interview Process</label>
-                                <input type="text" class="form-control" name="InterviewProcess" placeholder="HR Screening → Final Interview">
-                            </div>
-                        </div>
-                        <div class="review-box p-4 rounded-4 bg-light mt-5 text-center">
-                            <h5>Ready to send to AI Engine?</h5>
-                            <p class="text-muted small">This will trigger your n8n webhook for candidate scouting.</p>
-                            <button type="submit" class="btn btn-primary px-5 py-3 mt-3">
-                                <i class="fas fa-rocket me-2"></i> Launch Campaign
-                            </button>
-                        </div>
-                        <div class="d-flex justify-content-start mt-4">
-                            <button type="button" class="btn btn-outline-light px-4 py-3 prev-btn"><i class="fas fa-chevron-left me-2"></i> Back</button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
+<div class="wizard-container py-5">
+    <div class="wizard-progress-wrapper" data-aos="fade-down">
+        <div class="wizard-progress-bar">
+            <div class="wizard-progress-fill" id="progressFill"></div>
+        </div>
+        <div class="phase-indicator">
+            <span class="phase-item active" data-step="1">Company</span>
+            <span class="phase-item" data-step="2">HR Lead</span>
+            <span class="phase-item" data-step="3">Role</span>
+            <span class="phase-item" data-step="4">Compensation</span>
+            <span class="phase-item" data-step="5">Launch</span>
         </div>
     </div>
+
+    <form id="multiPageWizard" method="POST" action="{{ url_for('dashboard.main_dashboard') }}">
+        <!-- Page 1: Organization Data -->
+        <div class="card wizard-card form-page active" id="page1">
+            <div class="card-body p-4 p-md-5">
+                <span class="step-label-badge">Phase 01</span>
+                <h2 class="form-header-title">The Foundation</h2>
+                <p class="text-muted mb-4">Set the ground for your hiring campaign by detailing your company's core profile.</p>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Company Name</label>
+                            <input type="text" class="form-control" name="CompanyName" placeholder="e.g. InnovaLogic Systems" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Company Website</label>
+                            <input type="url" class="form-control" name="CompanyWebsite" placeholder="https://www.innovalogic.ai" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Office Address</label>
+                            <input type="text" class="form-control" name="CompanyAddress" placeholder="Gurgaon, India" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Industry</label>
+                            <input type="text" class="form-control" name="CompanyIndustry" placeholder="AI Automation / SaaS" required>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="premium-input-group">
+                            <label>Description & Mission</label>
+                            <textarea class="form-control" name="CompanyDescriptionAndMission" rows="3" placeholder="Explain your core objective..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="premium-input-group">
+                            <label>Culture & Values</label>
+                            <textarea class="form-control" name="CompanyCultureAndValues" rows="2" placeholder="Ownership, speed, creativity..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-wizard btn-next next-btn">Next: Stakeholder <i class="fas fa-arrow-right ms-2"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2: Stakeholder Contact -->
+        <div class="card wizard-card form-page" id="page2">
+            <div class="card-body p-4 p-md-5">
+                <span class="step-label-badge">Phase 02</span>
+                <h2 class="form-header-title">Process Stakeholder</h2>
+                <p class="text-muted mb-4">Enter the details of the main point of contact for this campaign.</p>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Contact Full Name</label>
+                            <input type="text" class="form-control" name="fullName" placeholder="Arjun Mehta" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Job Title (HR)</label>
+                            <input type="text" class="form-control" name="hrTitle" placeholder="Talent Acquisition Lead" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Professional Email</label>
+                            <input type="email" class="form-control" name="hrEmail" placeholder="arjun.mehta@innovalogic.ai" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Contact Phone</label>
+                            <input type="tel" class="form-control" name="hrPhone" placeholder="+91 9812345678" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>LinkedIn Profile</label>
+                            <input type="url" class="form-control" name="hrLinkedIn" placeholder="https://linkedin.com/in/..." required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Operating Timezone</label>
+                            <input type="text" class="form-control" name="preferredTimezone" placeholder="IST (UTC+5:30)" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-wizard btn-prev prev-btn"><i class="fas fa-arrow-left me-2"></i> Back</button>
+                    <button type="button" class="btn btn-wizard btn-next next-btn">Next: Role Definition <i class="fas fa-arrow-right ms-2"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: Role Definition -->
+        <div class="card wizard-card form-page" id="page3">
+            <div class="card-body p-4 p-md-5">
+                <span class="step-label-badge">Phase 03</span>
+                <h2 class="form-header-title">The Role</h2>
+                <p class="text-muted mb-4">Define the specific position you are looking to fill.</p>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Position Title</label>
+                            <input type="text" class="form-control" name="PositionTitle" placeholder="AI Automation Engineer" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Department</label>
+                            <input type="text" class="form-control" name="Department" placeholder="Engineering" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="premium-input-group">
+                            <label>Job Type</label>
+                            <select class="form-select" name="JobType" required>
+                                <option>Full-time</option><option>Contract</option><option>Part-time</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="premium-input-group">
+                            <label>Work Mode</label>
+                            <select class="form-select" name="WorkMode" required>
+                                <option>Remote</option><option>On-site</option><option>Hybrid</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="premium-input-group">
+                            <label>Hire Location</label>
+                            <input type="text" class="form-control" name="Location" placeholder="India" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Experience Required</label>
+                            <input type="text" class="form-control" name="ExperienceRequired" placeholder="0-2 years" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Education Required</label>
+                            <input type="text" class="form-control" name="EducationRequirements" placeholder="B.Tech (CS / AI)" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-wizard btn-prev prev-btn"><i class="fas fa-arrow-left me-2"></i> Back</button>
+                    <button type="button" class="btn btn-wizard btn-next next-btn">Next: Skills & Budget <i class="fas fa-arrow-right ms-2"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 4: Compensation & Skills -->
+        <div class="card wizard-card form-page" id="page4">
+            <div class="card-body p-4 p-md-5">
+                <span class="step-label-badge">Phase 04</span>
+                <h2 class="form-header-title">Compensation & Skills</h2>
+                <p class="text-muted mb-4">Set the budget and mandatory technical stack for this hire.</p>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="premium-input-group">
+                            <label>Currency</label>
+                            <input type="text" class="form-control" name="Currency" placeholder="INR" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="premium-input-group">
+                            <label>Minimum Salary</label>
+                            <input type="number" class="form-control" name="MinimumSalary" placeholder="600000" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="premium-input-group">
+                            <label>Maximum Salary</label>
+                            <input type="number" class="form-control" name="MaximumSalary" placeholder="900000" required>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="premium-input-group">
+                            <label>Mandatory Skills</label>
+                            <textarea class="form-control" name="RequiredSkillsAndExperience" rows="2" placeholder="Python, LangChain, n8n, API integration..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="premium-input-group">
+                            <label>Primary Responsibilities</label>
+                            <textarea class="form-control" name="KeyResponsibilities" rows="3" placeholder="Design pipelines, Deploy automation..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-wizard btn-prev prev-btn"><i class="fas fa-arrow-left me-2"></i> Back</button>
+                    <button type="button" class="btn btn-wizard btn-next next-btn">Next: Finalize Campaign <i class="fas fa-arrow-right ms-2"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 5: Finalize and Launch -->
+        <div class="card wizard-card form-page" id="page5">
+            <div class="card-body p-4 p-md-5">
+                <span class="step-label-badge">Phase 05</span>
+                <h2 class="form-header-title">Final Details</h2>
+                <p class="text-muted mb-4">Provide the final context before our AI agents begin their search.</p>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Nice to Have Skills</label>
+                            <input type="text" class="form-control" name="NiceToHaveSkills" placeholder="Docker, Kubernetes, Redis">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Benefits & Perks</label>
+                            <input type="text" class="form-control" name="BenefitsAndPerks" placeholder="Work flexibility, Learning stipend...">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="premium-input-group">
+                            <label>Interview Process Flow</label>
+                            <input type="text" class="form-control" name="InterviewProcess" placeholder="HR Screening → Technical Test → Final Interview">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Expected Start Date</label>
+                            <input type="date" class="form-control" name="ExpectedStartDate" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="premium-input-group">
+                            <label>Hiring Urgency</label>
+                            <select class="form-select" name="HiringUrgency" required>
+                                <option>Immediate</option><option>Flexible</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-4 rounded-4 bg-primary bg-opacity-5 border border-primary border-opacity-10 text-center">
+                    <h5 class="fw-bold text-primary mb-2"><i class="fas fa-shield-halved me-2"></i> Review and Deploy</h5>
+                    <p class="small text-muted mb-3">By clicking below, you trigger a live agent swarm to locate best-fit talent based on these criteria.</p>
+                    <button type="submit" class="btn btn-wizard btn-next w-100 py-3">
+                        <i class="fas fa-bolt me-2 pulse"></i> LAUNCH AGENT CAMPAIGN
+                    </button>
+                </div>
+
+                <div class="d-flex justify-content-start mt-4">
+                    <button type="button" class="btn btn-wizard btn-prev prev-btn">Back</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const steps = document.querySelectorAll('.form-step');
+    const pages = document.querySelectorAll('.form-page');
+    const progressFill = document.getElementById('progressFill');
+    const phaseItems = document.querySelectorAll('.phase-item');
     const nextBtns = document.querySelectorAll('.next-btn');
     const prevBtns = document.querySelectorAll('.prev-btn');
-    const stepItems = document.querySelectorAll('.step-item');
-    let currentStep = 0;
+    let currentPageIdx = 0;
+
+    function updateWizard() {
+        // Toggle visibility
+        pages.forEach((page, idx) => {
+            if(idx === currentPageIdx) {
+                page.classList.add('active');
+            } else {
+                page.classList.remove('active');
+            }
+        });
+
+        // Update progress bar
+        const progressPercent = ((currentPageIdx + 1) / pages.length) * 100;
+        progressFill.style.width = progressPercent + '%';
+
+        // Update phase items
+        phaseItems.forEach((item, idx) => {
+            if(idx <= currentPageIdx) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     nextBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            if (currentStep < steps.length - 1) {
-                steps[currentStep].classList.remove('active');
-                if (stepItems[currentStep]) stepItems[currentStep].classList.remove('active');
-                currentStep++;
-                steps[currentStep].classList.add('active');
-                if (stepItems[currentStep]) stepItems[currentStep].classList.add('active');
+            // Basic validation for current page inputs
+            const currentInputs = pages[currentPageIdx].querySelectorAll('input[required], textarea[required], select[required]');
+            let isValid = true;
+            currentInputs.forEach(input => {
+                if(!input.value) {
+                    input.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+
+            if (isValid && currentPageIdx < pages.length - 1) {
+                currentPageIdx++;
+                updateWizard();
             }
         });
     });
 
     prevBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            if (currentStep > 0) {
-                steps[currentStep].classList.remove('active');
-                if (stepItems[currentStep]) stepItems[currentStep].classList.remove('active');
-                currentStep--;
-                steps[currentStep].classList.add('active');
-                if (stepItems[currentStep]) stepItems[currentStep].classList.add('active');
+            if (currentPageIdx > 0) {
+                currentPageIdx--;
+                updateWizard();
             }
         });
     });
+
+    // Initialize
+    updateWizard();
 });
 </script>
 {% endblock %}
