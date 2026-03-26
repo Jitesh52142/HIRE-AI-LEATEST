@@ -7,3 +7,4 @@ pandas
 requests
 gunicorn
 numpy
+Werkzeug>=3.1.0

@@ -1,52 +1,250 @@
 {% extends "layouts/base.html" %}
-{% block title %}Admin Dashboard - Hire AI{% endblock %}
+
+{% block title %}Admin Control Panel - Hire AI{% endblock %}
 
 {% block content %}
-<h1 class="text-primary-dark mb-4">Admin Dashboard</h1>
-<p>Viewing all raw data from MongoDB collections.</p>
+<div class="admin-header mb-5" data-aos="fade-down">
+    <div class="d-flex align-items-center gap-3">
+        <div class="admin-badge">
+            <i class="fas fa-shield-halved fs-3 text-primary"></i>
+        </div>
+        <div>
+            <h1 class="fw-800 mb-0">System Control Center</h1>
+            <p class="text-muted mb-0">Manage system-wide data and monitor MongoDB collections</p>
+        </div>
+    </div>
+</div>
 
-<div class="card shadow-sm">
-    <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" id="adminTab" role="tablist">
+<div class="row g-4 mb-5">
+    {% for name, data in collections.items() %}
+    <div class="col-md-3" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 100 }}">
+        <div class="card stat-card-minimal">
+            <div class="stat-icon-small">
+                <i class="fas fa-database text-primary"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-label-small">{{ name|title }}</div>
+                <div class="stat-value-small">{{ data|length }}</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card border-0 shadow-2xl overflow-hidden mb-5" data-aos="fade-up">
+    <div class="card-header border-0 bg-transparent p-0">
+        <ul class="nav admin-tabs" id="adminTab" role="tablist">
             {% for name in collections.keys() %}
             <li class="nav-item" role="presentation">
-                <button class="nav-link {% if loop.first %}active{% endif %}" id="{{ name }}-tab" data-bs-toggle="tab" data-bs-target="#{{ name }}" type="button" role="tab">{{ name|title }}</button>
+                <button class="nav-link admin-tab-btn {% if loop.first %}active{% endif %}" id="{{ name }}-tab" data-bs-toggle="tab" data-bs-target="#{{ name }}" type="button" role="tab">
+                    <i class="fas fa-folder-open me-2"></i>{{ name|title }}
+                </button>
             </li>
             {% endfor %}
         </ul>
     </div>
-    <div class="card-body">
+    <div class="card-body p-0">
         <div class="tab-content" id="adminTabContent">
             {% for name, data in collections.items() %}
             <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="{{ name }}" role="tabpanel">
-                <h4 class="mb-3">{{ name|title }} ({{ data|length }} records)</h4>
-                {% if data %}
-                <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
-                    <table class="table table-bordered table-striped table-sm">
-                        <thead class="table-light sticky-top">
-                            <tr>
-                                {% for key in data[0].keys() %}
-                                <th>{{ key }}</th>
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for record in data %}
-                            <tr>
-                                {% for value in record.values() %}
-                                <td style="max-width: 250px; overflow-x: auto;">{{ value }}</td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-light bg-opacity-25">
+                    <h5 class="fw-bold mb-0 text-dark">
+                        <i class="fas fa-table-list text-primary me-2"></i> {{ name|title }} Explorer
+                    </h5>
+                    <div class="search-box-admin">
+                        <i class="fas fa-search me-2"></i>
+                        <input type="text" class="table-search" placeholder="Search records..." onkeyup="filterTable(this, '{{ name }}-table')">
+                    </div>
                 </div>
-                {% else %}
-                <p class="text-muted">No records found in this collection.</p>
-                {% endif %}
+                
+                <div class="table-container p-0">
+                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                        {% if data %}
+                        <table class="table premium-table mb-0" id="{{ name }}-table">
+                            <thead>
+                                <tr>
+                                    {% for key in data[0].keys() %}
+                                    <th>{{ key }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in data %}
+                                <tr>
+                                    {% for key, value in record.items() %}
+                                    <td>
+                                        {% if value is sameas true %}
+                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success border-opacity-25">True</span>
+                                        {% elif value is sameas false %}
+                                            <span class="badge rounded-pill bg-danger-subtle text-danger border border-danger border-opacity-25">False</span>
+                                        {% elif '@' in value|string and '.' in value|string %}
+                                            <a href="mailto:{{ value }}" class="text-primary text-decoration-none fw-600">{{ value }}</a>
+                                        {% elif value|string|length > 100 %}
+                                            <div class="text-truncate-cell" title="{{ value }}">{{ value }}</div>
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <div class="empty-state">
+                                <i class="fas fa-ghost fs-1 text-muted mb-3"></i>
+                                <p class="text-muted">No records found in this collection.</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
+
+<style>
+.admin-badge {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-glow);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--glass-border);
+}
+.stat-card-minimal {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--bg-white);
+    border: 1px solid var(--glass-border);
+    transition: var(--transition);
+}
+.stat-card-minimal:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+}
+.stat-icon-small {
+    width: 45px;
+    height: 45px;
+    background: var(--bg-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.stat-label-small {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+.stat-value-small {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+.admin-tabs {
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0 1rem;
+}
+.admin-tab-btn {
+    border: none !important;
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    padding: 1.25rem 1.5rem !important;
+    font-weight: 600;
+    position: relative;
+    transition: var(--transition);
+}
+.admin-tab-btn.active {
+    color: var(--primary) !important;
+}
+.admin-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1.5rem;
+    right: 1.5rem;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 10px 10px 0 0;
+}
+.premium-table {
+    font-size: 0.9rem;
+}
+.premium-table thead th {
+    background: #fff;
+    border-bottom: 2px solid var(--glass-border);
+    padding: 1.25rem 1rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.premium-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+.text-truncate-cell {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.search-box-admin {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--glass-border);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    width: 300px;
+    transition: var(--transition);
+}
+.search-box-admin:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+.table-search {
+    border: none;
+    outline: none;
+    font-size: 0.85rem;
+    width: 100%;
+}
+.fw-600 { font-weight: 600; }
+</style>
+
+<script>
+function filterTable(input, tableId) {
+    let filter = input.value.toUpperCase();
+    let table = document.getElementById(tableId);
+    let tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        let visible = false;
+        let td = tr[i].getElementsByTagName("td");
+        for (let j = 0; j < td.length; j++) {
+            if (td[j]) {
+                if (td[j].textContent.toUpperCase().indexOf(filter) > -1) {
+                    visible = true;
+                    break;
+                }
+            }
+        }
+        tr[i].style.display = visible ? "" : "none";
+    }
+}
+</script>
 {% endblock %}
