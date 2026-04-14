@@ -10,17 +10,20 @@
 .phase-indicator { display: flex; justify-content: space-between; margin-top: 1rem; }
 .phase-item { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); transition: color 0.3s ease; }
 .phase-item.active { color: var(--primary); }
-.wizard-card { border-radius: 30px; border: 1px solid var(--glass-border); background: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+.wizard-card { border-radius: 30px; border: 1px solid var(--glass-border); background: var(--bg-white); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
 .btn-wizard { padding: 14px 40px; border-radius: 50px; font-weight: 800; transition: all 0.3s ease; border: none; }
 .btn-next { background: var(--primary); color: #fff; box-shadow: 0 10px 20px -10px var(--primary); }
 .btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -10px var(--primary); }
-.btn-prev { background: #f8fafc; color: var(--text-muted); border: 1px solid #e2e8f0; }
-.btn-prev:hover { background: #f1f5f9; color: var(--text-main); }
-.step-header { border-bottom: 1px solid #f1f5f9; padding-bottom: 1.5rem; margin-bottom: 2rem; }
-.step-badge { background: var(--primary-bg); color: var(--primary); padding: 5px 15px; border-radius: 50px; font-weight: 700; font-size: 0.75rem; display: inline-block; margin-bottom: 0.5rem; }
-.form-label { font-weight: 700; color: #334155; margin-bottom: 0.5rem; font-size: 0.95rem; }
-.form-control, .form-select { padding: 12px 18px; border-radius: 12px; background: #fff; border: 1px solid #e2e8f0; font-weight: 500; }
-.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-bg); }
+.btn-prev { background: var(--bg-light); color: var(--text-muted); border: 1px solid var(--glass-border); }
+.btn-prev:hover { background: var(--bg-white); color: var(--text-main); border-color: var(--primary); }
+.step-header { border-bottom: 1px solid var(--glass-border); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+.step-badge { background: var(--primary-glow); color: var(--primary); padding: 5px 15px; border-radius: 50px; font-weight: 700; font-size: 0.75rem; display: inline-block; margin-bottom: 0.5rem; border: 1px solid var(--primary); }
+.form-label { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; font-size: 0.95rem; }
+.form-control, .form-select { padding: 12px 18px; border-radius: 12px; background: var(--bg-white); border: 1px solid var(--glass-border); font-weight: 500; color: var(--text-main); }
+.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); color: var(--text-main); background: var(--bg-white) !important; }
+body.dark-mode .wizard-card { background: var(--glass-bg); }
+body.dark-mode .btn-prev { background: transparent; }
+body.dark-mode .form-control, body.dark-mode .form-select { background: rgba(30,41,59,0.5); }
 .pulse-loader { animation: pulse 2s infinite; }
 @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 </style>

@@ -454,6 +454,22 @@ body.dark-mode .glass-alert {
     background: rgba(30, 41, 59, 0.95);
 }
 
+body.dark-mode .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-main);
+    --bs-table-hover-bg: rgba(255,255,255,0.05);
+    color: var(--text-main);
+}
+
+body.dark-mode .table td, body.dark-mode .table th {
+    border-color: var(--glass-border);
+}
+
+body.dark-mode .premium-table thead th, body.dark-mode .premium-table-compact thead th {
+    color: var(--primary);
+    background: rgba(16, 185, 129, 0.1);
+}
+
 body.dark-mode .navbar-brand .brand-name {
     background: linear-gradient(135deg, #fff, var(--primary));
     -webkit-background-clip: text;
