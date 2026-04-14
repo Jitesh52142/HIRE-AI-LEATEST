@@ -179,32 +179,32 @@
                         <i class="fas fa-user-circle fs-1 text-primary"></i>
                     </div>
                     <div>
-                        <h5 class="mb-0 fw-800 text-dark">{{ candidate.get('name', 'N/A') }}</h5>
-                        <p class="mb-0 small text-muted badge bg-light">{{ candidate.get('title', 'N/A') }}</p>
+                        <h5 class="mb-0 fw-800 text-dark">{{ candidate.get('fullName', 'N/A') }}</h5>
+                        <p class="mb-0 small text-muted badge bg-light">{{ candidate.get('profile_name', 'N/A') }}</p>
                     </div>
                 </div>
 
                 <div class="expertise-meter mb-4">
                     <div class="d-flex justify-content-between mb-2">
                         <span class="small fw-bold">Overall Fit</span>
-                        <span class="small text-primary fw-800">{{ candidate.get('score', '0') }}%</span>
+                        <span class="small text-primary fw-800">85%</span>
                     </div>
                     <div class="progress" style="height: 10px; border-radius: 10px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ candidate.get('score', '0') }}%"></div>
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 85%"></div>
                     </div>
                 </div>
 
                 <div class="row g-2 mb-4">
-                    <div class="col-6">
+                    <div class="col-8">
                         <div class="small-info-item">
-                            <span class="label">Exp</span>
-                            <span class="value">{{ candidate.get('experience', 'N/A') }}</span>
+                            <span class="label">Email</span>
+                            <span class="value">{{ candidate.get('email', 'N/A') }}</span>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <div class="small-info-item">
-                            <span class="label">Location</span>
-                            <span class="value">{{ candidate.get('location', 'N/A') }}</span>
+                            <span class="label">GitHub</span>
+                            <span class="value"><a href="{{ candidate.get('githubUrl', '#') }}" target="_blank">View</a></span>
                         </div>
                     </div>
                 </div>

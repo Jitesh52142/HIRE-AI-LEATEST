@@ -7,11 +7,14 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
     # Fetch real stats from MongoDB
-    stats = {
-        'candidates': mongo.db.candidate_insights_cache.count_documents({}),
-        'submissions': mongo.db.form_submissions.count_documents({}),
-        'users': mongo.db.users.count_documents({})
-    }
+    try:
+        stats = {
+            'candidates': mongo.db.candidate_insights_cache.count_documents({}),
+            'submissions': mongo.db.form_submissions.count_documents({}),
+            'users': mongo.db.users.count_documents({})
+        }
+    except Exception:
+        stats = {'candidates': 0, 'submissions': 0, 'users': 0}
     return render_template('main/index.html', stats=stats)
 
 @main_bp.route('/about')

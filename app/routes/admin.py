@@ -2,6 +2,7 @@ from functools import wraps
 from flask import Blueprint, render_template, abort
 from flask_login import current_user, login_required
 from app import mongo
+from bson import ObjectId
 import os
 
 admin_bp = Blueprint('admin', __name__)
@@ -22,10 +23,16 @@ def admin_required(f):
 def admin_dashboard():
     # Fetch all data from MongoDB collections
     collections = {}
-    collection_names = mongo.db.list_collection_names()
-    
-    for name in collection_names:
-        # Using a list to be able to iterate in the template
-        collections[name] = list(mongo.db[name].find())
-        
+    try:
+        collection_names = mongo.db.list_collection_names()
+        for name in collection_names:
+            docs = []
+            for doc in mongo.db[name].find():
+                # Convert ObjectId to string so templates can render them
+                if '_id' in doc and isinstance(doc['_id'], ObjectId):
+                    doc['_id'] = str(doc['_id'])
+                docs.append(doc)
+            collections[name] = docs
+    except Exception as e:
+        collections = {}
     return render_template('admin/admin_dashboard.html', collections=collections)

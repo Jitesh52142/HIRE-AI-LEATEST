@@ -44,7 +44,7 @@ def login():
         password = request.form.get('password')
         user_doc = mongo.db.users.find_one({'email': email})
 
-        if user_doc and bcrypt.check_password_hash(user_doc['password'], password):
+        if user_doc and user_doc.get('password') and bcrypt.check_password_hash(user_doc['password'], password):
             user_obj = User(user_doc)
             login_user(user_obj, remember=True)
             flash('Login successful!', 'success')

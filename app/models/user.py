@@ -5,7 +5,7 @@ class User(UserMixin):
         self.user_json = user_json
 
     def get_id(self):
-        return self.user_json.get('_id')
+        return str(self.user_json.get('_id'))
 
     @property
     def email(self):

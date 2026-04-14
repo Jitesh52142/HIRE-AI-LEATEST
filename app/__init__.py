@@ -28,7 +28,24 @@ def create_app(config_class=Config):
     @login_manager.user_loader
     def load_user(user_id):
         """Load user from the database."""
-        user_json = mongo.db.users.find_one({'_id': user_id})
+        from bson.objectid import ObjectId
+        if not user_id:
+            return None
+            
+        user_json = None
+        # Check if user_id is a valid ObjectId string
+        if len(user_id) == 24:
+            try:
+                user_json = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+            except:
+                pass
+                
+        # If not found or not ObjectId, fallback to string _id or email
+        if not user_json:
+            user_json = mongo.db.users.find_one({'_id': user_id})
+        if not user_json:
+            user_json = mongo.db.users.find_one({'email': user_id})
+            
         if user_json:
             return User(user_json)
         return None
@@ -64,13 +81,24 @@ def create_admin_user_if_not_exists():
         print("Warning: ADMIN_EMAIL or ADMIN_PASSWORD not set in .env. Skipping admin creation.")
         return
 
-    # Check if admin user already exists
-    if not mongo.db.users.find_one({'email': admin_email}):
-        hashed_password = bcrypt.generate_password_hash(admin_password).decode('utf-8')
+    hashed_password = bcrypt.generate_password_hash(admin_password).decode('utf-8')
+
+    existing = mongo.db.users.find_one({'email': admin_email})
+    if not existing:
+        # Create fresh admin user
         mongo.db.users.insert_one({
-            '_id': admin_email, # Using email as a unique ID
+            '_id': admin_email,
             'email': admin_email,
             'password': hashed_password,
             'is_admin': True
         })
         print(f"Admin user '{admin_email}' created successfully.")
+    elif not existing.get('password'):
+        # Fix malformed doc that is missing the password field
+        mongo.db.users.update_one(
+            {'email': admin_email},
+            {'$set': {'password': hashed_password, 'is_admin': True}}
+        )
+        print(f"Admin user '{admin_email}' repaired (password was missing).")
+    else:
+        print(f"Admin user '{admin_email}' already exists.")
