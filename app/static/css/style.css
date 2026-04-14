@@ -410,3 +410,82 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     transform: rotate(-45deg);
     bottom: 0;
 }
+
+/* --- Dark Mode Variables & Overrides --- */
+body.dark-mode {
+    --bg-light: #0b1120;
+    --bg-white: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(16, 185, 129, 0.25);
+    --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .text-dark {
+    color: var(--text-main) !important;
+}
+
+body.dark-mode .bg-light, body.dark-mode .bg-white {
+    background-color: var(--bg-white) !important;
+    color: var(--text-main) !important;
+}
+
+body.dark-mode .form-control, body.dark-mode .form-select {
+    background: rgba(30, 41, 59, 0.8);
+    color: var(--text-main);
+    border-color: var(--glass-border);
+}
+
+body.dark-mode .form-control:focus, body.dark-mode .form-select:focus {
+    color: var(--text-main);
+    background: #1e293b;
+}
+
+body.dark-mode .glass-navbar {
+    background: rgba(11, 17, 32, 0.85);
+}
+
+body.dark-mode .glass-footer {
+    background: rgba(11, 17, 32, 0.85);
+}
+
+body.dark-mode .glass-alert {
+    background: rgba(30, 41, 59, 0.95);
+}
+
+body.dark-mode .navbar-brand .brand-name {
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.dark-mode .card-header {
+    background: rgba(16, 185, 129, 0.1);
+}
+
+body.dark-mode .btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+body.dark-mode .btn-outline-primary:hover {
+    color: #fff;
+    background: var(--primary);
+}
+
+/* --- Mobile Responsiveness Adjustments --- */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    .content-wrapper {
+        padding-top: 85px;
+    }
+    .card-header h2 {
+        font-size: 1.4rem;
+    }
+    .glass-navbar {
+        padding: 0.5rem 0;
+    }
+}

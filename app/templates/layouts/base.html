@@ -76,6 +76,12 @@
                             </a>
                         </li>
                         {% endif %}
+                        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                            <button id="theme-toggle" class="btn btn-outline-primary border-0 shadow-none d-flex align-items-center gap-2" style="background: transparent;">
+                                <i class="fas fa-moon dark-icon"></i>
+                                <span class="d-lg-none">Dark Mode</span>
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -129,6 +135,35 @@
             duration: 800,
             once: true,
             offset: 50
+        });
+
+        // Theme Toggle Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = themeToggleBtn.querySelector('i');
+            const body = document.body;
+
+            // Check Local Storage
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'dark') {
+                body.classList.add('dark-mode');
+                body.classList.remove('premium-light');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    body.classList.add('premium-light');
+                    themeIcon.classList.replace('fa-sun', 'fa-moon');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    body.classList.add('dark-mode');
+                    body.classList.remove('premium-light');
+                    themeIcon.classList.replace('fa-moon', 'fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
         });
     </script>
     {% block scripts %}{% endblock %}
