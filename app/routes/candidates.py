@@ -65,7 +65,8 @@ def response_score(email):
     else:
         # The key in the sheet is 'Email Address'
         # Safely pad/clean the email string because trailing spaces like %20 break matches
-        clean_target_email = email.strip().lower()
+        from urllib.parse import unquote
+        clean_target_email = unquote(email).strip().lower()
         
         # Apply lower() and strip() safely to the entire Series before matching
         if 'Email Address' in df.columns:

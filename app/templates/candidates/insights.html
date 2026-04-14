@@ -215,7 +215,7 @@ body.dark-mode .small-info-item .value { color: #f8fafc !important; }
                     </div>
                 </div>
 
-                <a href="{{ url_for('candidates.response_score', email=candidate.get('Email Address', '')) }}" class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold">
+                <a href="{{ url_for('candidates.response_score', email=candidate.get('Email Address', '')|trim) }}" class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold">
                     View Full Insight <i class="fas fa-arrow-right ms-2 fs-xs"></i>
                 </a>
             </div>
