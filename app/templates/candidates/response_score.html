@@ -11,16 +11,16 @@
             </a>
             <div class="d-flex align-items-center gap-4">
                 <div class="avatar-glow">
-                    <i class="fas fa-user-tie fs-1 text-primary"></i>
+                    <i class="fas fa-file-contract fs-1 text-primary"></i>
                 </div>
                 <div>
-                    <h1 class="fw-800 mb-1">{{ candidate.get('name', 'Talent Analysis') }}</h1>
+                    <h1 class="fw-800 mb-1">{% if candidate %}{{ candidate.get('Full Name', 'Talent Analysis') }}{% else %}Applicant Analysis{% endif %}</h1>
                     <p class="text-muted mb-0"><i class="fas fa-envelope me-2"></i>{{ email }}</p>
                 </div>
                 <div class="ms-auto">
                     <div class="score-orb">
-                        <div class="score-value">{{ candidate.get('score', 'N/A') }}%</div>
-                        <div class="score-label">Match</div>
+                        <div class="score-value">{% if candidate %}{{ candidate.get('score_pct', '0') }}%{% else %}N/A{% endif %}</div>
+                        <div class="score-label">Quiz Score</div>
                     </div>
                 </div>
             </div>
@@ -37,20 +37,22 @@
                 {% if candidate %}
                 <div class="analysis-list">
                     {% for col in columns %}
-                    <div class="analysis-item p-4 px-5 d-flex align-items-center justify-content-between border-bottom border-light">
-                        <div class="analysis-label fw-bold text-muted text-uppercase small letter-spacing-1">{{ col.replace('_', ' ') }}</div>
+                    {% if col not in ['score_pct', '_id'] %}
+                    <div class="analysis-item p-4 px-5 border-bottom border-light">
+                        <div class="analysis-label fw-bold text-primary mb-2" style="font-size: 0.95rem;">{{ col }}</div>
                         <div class="analysis-value text-dark fw-600">
                             {% if 'score' in col|lower or 'confidence' in col|lower %}
                                 <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
-                                    {{ candidate.get(col, 'N/A') }}%
+                                    {{ candidate.get(col, 'N/A') }}
                                 </div>
-                            {% elif col|lower == 'email' %}
+                            {% elif 'email' in col|lower %}
                                 <a href="mailto:{{ candidate.get(col) }}" class="text-primary text-decoration-none">{{ candidate.get(col) }}</a>
                             {% else %}
                                 {{ candidate.get(col, 'N/A') }}
                             {% endif %}
                         </div>
                     </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
                 {% else %}

@@ -176,40 +176,40 @@
             <div class="card-body p-4">
                 <div class="d-flex align-items-center mb-4">
                     <div class="candidate-avatar me-3">
-                        <i class="fas fa-user-circle fs-1 text-primary"></i>
+                        <i class="fas fa-file-contract fs-1 text-primary"></i>
                     </div>
                     <div>
-                        <h5 class="mb-0 fw-800 text-dark">{{ candidate.get('fullName', 'N/A') }}</h5>
-                        <p class="mb-0 small text-muted badge bg-light">{{ candidate.get('profile_name', 'N/A') }}</p>
+                        <h5 class="mb-0 fw-800 text-dark text-truncate" style="max-width: 200px;">{{ candidate.get('Full Name', 'No Name') }}</h5>
+                        <p class="mb-0 small text-muted badge bg-light">Candidate Response</p>
                     </div>
                 </div>
 
-                <div class="expertise-meter mb-4">
+                <div class="expertise-meter mb-3">
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="small fw-bold">Overall Fit</span>
-                        <span class="small text-primary fw-800">85%</span>
+                        <span class="small fw-bold">Quiz Score</span>
+                        <span class="small text-primary fw-800">{{ candidate.get('score_pct', 0) }}%</span>
                     </div>
                     <div class="progress" style="height: 10px; border-radius: 10px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 85%"></div>
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ candidate.get('score_pct', 0) }}%"></div>
                     </div>
                 </div>
 
                 <div class="row g-2 mb-4">
-                    <div class="col-8">
-                        <div class="small-info-item">
-                            <span class="label">Email</span>
-                            <span class="value">{{ candidate.get('email', 'N/A') }}</span>
+                    <div class="col-7">
+                        <div class="small-info-item text-start px-3">
+                            <span class="label">Email Address</span>
+                            <span class="value text-truncate d-block">{{ candidate.get('Email Address', 'N/A') }}</span>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-5">
                         <div class="small-info-item">
-                            <span class="label">GitHub</span>
-                            <span class="value"><a href="{{ candidate.get('githubUrl', '#') }}" target="_blank">View</a></span>
+                            <span class="label">Mobile</span>
+                            <span class="value text-truncate d-block">{{ candidate.get('Mobile Number', 'N/A') }}</span>
                         </div>
                     </div>
                 </div>
 
-                <a href="{{ url_for('candidates.response_score', email=candidate.get('email')) }}" class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold">
+                <a href="{{ url_for('candidates.response_score', email=candidate.get('Email Address', '')) }}" class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold">
                     View Full Insight <i class="fas fa-arrow-right ms-2 fs-xs"></i>
                 </a>
             </div>
