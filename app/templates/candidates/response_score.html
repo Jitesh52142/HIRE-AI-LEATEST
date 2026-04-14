@@ -95,5 +95,11 @@
 .letter-spacing-1 { letter-spacing: 1px; }
 .analysis-value { font-size: 1.05rem; }
 .fw-600 { font-weight: 600; }
+
+/* Dark Mode Overrides */
+body.dark-mode .score-orb { color: var(--bg-light); font-weight: 800; }
+body.dark-mode .border-light { border-color: var(--glass-border) !important; }
+body.dark-mode .card { background: var(--glass-bg); }
+body.dark-mode .card-footer { background: rgba(30, 41, 59, 0.5) !important; }
 </style>
 {% endblock %}
