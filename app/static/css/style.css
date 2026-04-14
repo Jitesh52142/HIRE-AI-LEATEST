@@ -443,6 +443,13 @@ body.dark-mode .form-control:focus, body.dark-mode .form-select:focus {
     background: #1e293b;
 }
 
+body.dark-mode .glow-bg {
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.02) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(52, 211, 153, 0.02) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, var(--bg-light) 0%, #080d19 100%);
+}
+
 body.dark-mode .form-control::placeholder {
     color: rgba(255, 255, 255, 0.3);
 }

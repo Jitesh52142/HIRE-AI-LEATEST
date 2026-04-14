@@ -222,8 +222,29 @@
     outline: none;
     font-size: 0.85rem;
     width: 100%;
+    background: transparent;
+    color: inherit;
 }
 .fw-600 { font-weight: 600; }
+
+body.dark-mode .stat-card-minimal, body.dark-mode .admin-tabs {
+    background: var(--bg-white);
+}
+body.dark-mode .stat-icon-small {
+    background: var(--bg-light);
+}
+body.dark-mode .premium-table thead th {
+    background: var(--bg-white);
+    border-bottom: 2px solid var(--glass-border);
+    color: var(--primary);
+}
+body.dark-mode .premium-table tbody td {
+    border-bottom: 1px solid var(--glass-border);
+}
+body.dark-mode .search-box-admin {
+    background: rgba(30, 41, 59, 0.5);
+    color: var(--text-main);
+}
 </style>
 
 <script>
