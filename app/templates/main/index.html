@@ -1,160 +1,126 @@
 {% extends "layouts/base.html" %}
-
-{% block title %}Hire AI - Next Gen Intelligent Recruitment{% endblock %}
+{% block title %}Hire AI — Intelligent Recruitment Platform{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section position-relative">
-    <div class="row align-items-center mb-5 min-vh-75">
-        <div class="col-lg-6 text-start" data-aos="fade-right">
-            <div class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-3 py-2 mb-4 border border-primary border-opacity-20">
-                <i class="fas fa-sparkles me-2"></i> Powered by Advanced AI
-            </div>
-            <h1 class="hero-title">
-                The Future of <span class="text-gradient">Recruitment</span> is Here.
-            </h1>
-            <p class="hero-subtitle">
-                Hire AI uses state-of-the-art machine learning to analyze, score, and match top-tier talent from across the web to your specific company culture and technical needs.
-            </p>
-            
-            <div class="d-flex flex-wrap gap-3">
-                {% if not current_user.is_authenticated %}
-                <a href="{{ url_for('auth.register') }}" class="btn-get-started shadow-lg">
-                    <span>Start Hiring Now</span>
-                    <i class="fas fa-arrow-right ms-3"></i>
-                </a>
-                <a href="{{ url_for('auth.login') }}" class="nav-link glass-link mt-2">
-                    Already have an account? Login
-                </a>
-                {% else %}
-                <a href="{{ url_for('dashboard.main_dashboard') }}" class="btn-get-started shadow-lg">
-                    <span>Go to Dashboard</span>
-                    <i class="fas fa-columns ms-3"></i>
-                </a>
-                {% endif %}
-            </div>
-            
-            <div class="mt-5 d-flex align-items-center gap-4 text-muted border-top pt-4 border-light opacity-75">
-                <div class="small-feature"><i class="fas fa-check-circle text-primary me-2"></i>98% Accuracy</div>
-                <div class="small-feature"><i class="fas fa-check-circle text-primary me-2"></i>Global Talent Pool</div>
-                <div class="small-feature"><i class="fas fa-check-circle text-primary me-2"></i>Smart Match</div>
-            </div>
-        </div>
-        
-        <div class="col-lg-6 mt-lg-0 mt-5" data-aos="fade-left" data-aos-delay="200">
-            <div class="position-relative hero-image-content">
-                <div class="card p-2 hero-mockup-card">
-                    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="dot dot-red"></div>
-                            <div class="dot dot-yellow"></div>
-                            <div class="dot dot-green"></div>
-                        </div>
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3">Live Analysis</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center py-4">
-                            <div class="mockup-avatar mb-3">
-                                <i class="fas fa-user-gear fs-1 text-primary"></i>
-                            </div>
-                            <h5 class="fw-bold mb-1">Optimizing Match...</h5>
-                            <p class="text-muted small">Neural Matching Engine v2.4</p>
-                            
-                            <div class="mt-4">
-                                <div class="d-flex justify-content-between mb-1 small">
-                                    <span class="text-muted">Processing Pool</span>
-                                    <span class="fw-bold">84%</span>
-                                </div>
-                                <div class="progress" style="height: 6px;">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 84%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Floating Labels -->
-                <div class="floating-badge badge-1" data-aos="zoom-in" data-aos-delay="400">
-                    <i class="fas fa-bolt me-2"></i> Faster Hiring
-                </div>
-                <div class="floating-badge badge-2" data-aos="zoom-in" data-aos-delay="600">
-                    <i class="fas fa-coins me-2"></i> Reduce Cost
-                </div>
-            </div>
-        </div>
+<!-- ====== Hero ====== -->
+<section class="hero-section">
+  <div class="row align-items-center g-5">
+    <!-- Left -->
+    <div class="col-lg-6" data-aos="fade-right">
+      <div class="hero-eyebrow">
+        <i class="fas fa-sparkles" style="font-size:0.7rem;"></i>
+        Powered by Advanced AI
+      </div>
+      <h1 class="hero-title">
+        Hire the best talent,<br>
+        <span class="highlight">10× faster</span>
+      </h1>
+      <p class="hero-desc">
+        Hire AI uses machine learning to analyze, score, and surface top-tier candidates from across the web — matched precisely to your company culture and technical requirements.
+      </p>
+      <div class="hero-actions">
+        {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg btn-pill">
+          Start hiring now <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-lg btn-pill">
+          Log in
+        </a>
+        {% else %}
+        <a href="{{ url_for('dashboard.main_dashboard') }}" class="btn btn-primary btn-lg btn-pill">
+          Open dashboard <i class="fas fa-arrow-right"></i>
+        </a>
+        {% endif %}
+      </div>
+      <div class="hero-proof">
+        <div class="proof-item"><i class="fas fa-circle-check"></i> 98% match accuracy</div>
+        <div class="proof-item"><i class="fas fa-circle-check"></i> Global talent pool</div>
+        <div class="proof-item"><i class="fas fa-circle-check"></i> Zero bias scoring</div>
+      </div>
     </div>
+
+    <!-- Right: mockup -->
+    <div class="col-lg-6" data-aos="fade-left" data-aos-delay="150">
+      <div class="position-relative">
+        <div class="hero-mockup">
+          <div class="mockup-bar">
+            <span class="mockup-dot red"></span>
+            <span class="mockup-dot yellow"></span>
+            <span class="mockup-dot green"></span>
+            <span class="mockup-url">app.hire-ai.com/insights</span>
+            <span class="badge badge-emerald ms-auto"><i class="fas fa-bolt" style="font-size:0.6rem;"></i> Live</span>
+          </div>
+          <div class="mockup-body">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <span style="font-size:0.8rem;font-weight:700;color:var(--color-text);">AI Candidate Ranking</span>
+              <span class="badge badge-emerald">3 matches</span>
+            </div>
+            {% set mock_candidates = [
+              ("Priya Sharma", "Full-Stack Engineer", "94"),
+              ("Arjun Mehta", "Backend Developer", "87"),
+              ("Sofia Chen", "DevOps Engineer", "81")
+            ] %}
+            {% for name, role, score in mock_candidates %}
+            <div class="mockup-row">
+              <div class="mockup-avatar"><i class="fas fa-user" style="font-size:0.7rem;"></i></div>
+              <div style="min-width:0;flex:1;">
+                <div class="mockup-name">{{ name }}</div>
+                <div class="mockup-role">{{ role }}</div>
+              </div>
+              <div style="width:70px;margin-right:10px;">
+                <div class="progress-track"><div class="progress-fill" style="width:{{ score }}%;"></div></div>
+              </div>
+              <div class="mockup-score">{{ score }}%</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Float badges -->
+        <div class="hero-float-badge top-right" style="color:var(--color-primary);">
+          <i class="fas fa-bolt" style="color:var(--color-primary);font-size:0.75rem;"></i> 10× faster hiring
+        </div>
+        <div class="hero-float-badge bottom-left" style="color:var(--color-text-2);">
+          <i class="fas fa-shield-check" style="color:var(--color-primary);font-size:0.75rem;"></i> Zero bias
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Statistics Section -->
-<section class="stats-section py-5">
-    <div class="container overflow-hidden">
-        <div class="row g-4">
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="stat-card">
-                    <div class="stat-value">{{ stats.get('candidates', 0) }}+</div>
-                    <div class="stat-label">Candidates Scanned</div>
-                </div>
-            </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="stat-card border-emerald">
-                    <div class="stat-value">{{ stats.get('submissions', 0) }}</div>
-                    <div class="stat-label">Active Commands</div>
-                </div>
-            </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="stat-card">
-                    <div class="stat-value">{{ stats.get('users', 0) }}</div>
-                    <div class="stat-label">Global Users</div>
-                </div>
-            </div>
-        </div>
+<!-- ====== Stats ====== -->
+<section class="py-5" data-aos="fade-up">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.get('candidates', 0) }}+</div>
+        <div class="stat-label">Candidates Scanned</div>
+      </div>
     </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.get('submissions', 0) }}</div>
+        <div class="stat-label">Active Campaigns</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.get('users', 0) }}</div>
+        <div class="stat-label">Global Users</div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Platforms Section -->
-<section class="py-5 text-center">
-    <div class="container" data-aos="fade-up">
-        <h4 class="mb-5 text-muted small text-uppercase letter-spacing-2">Trusted data sources</h4>
-        <div class="d-flex flex-wrap justify-content-center align-items-center gap-5 opacity-50 gray-scale-logo">
-            <i class="fab fa-linkedin fs-2"></i>
-            <i class="fab fa-github fs-2"></i>
-            <i class="fab fa-stack-overflow fs-2"></i>
-            <i class="fab fa-google fs-2"></i>
-            <i class="fab fa-microsoft fs-2"></i>
-        </div>
-    </div>
+<!-- ====== Trusted Sources ====== -->
+<section class="py-5 text-center border-top" style="border-color:var(--color-border)!important;" data-aos="fade-up">
+  <p class="text-xs fw-700 mb-4" style="text-transform:uppercase;letter-spacing:0.1em;color:var(--color-text-3);">Sourcing talent from</p>
+  <div class="trust-logos">
+    <i class="fab fa-linkedin" title="LinkedIn"></i>
+    <i class="fab fa-github" title="GitHub"></i>
+    <i class="fab fa-stack-overflow" title="Stack Overflow"></i>
+    <i class="fab fa-google" title="Google"></i>
+    <i class="fab fa-microsoft" title="Microsoft"></i>
+  </div>
 </section>
-
-<style>
-.text-gradient {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.letter-spacing-2 { letter-spacing: 2px; }
-.hero-mockup-card {
-    transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
-    border-radius: 30px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-}
-.floating-badge {
-    position: absolute;
-    background: #fff;
-    padding: 12px 24px;
-    border-radius: 50px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    font-weight: 700;
-    z-index: 10;
-    border: 1px solid var(--glass-border);
-}
-.badge-1 { top: -20px; right: 20px; color: var(--primary); }
-.badge-2 { bottom: 20px; left: -20px; color: var(--accent); }
-.gray-scale-logo i { transition: var(--transition); cursor: pointer; }
-.gray-scale-logo i:hover { color: var(--primary); opacity: 1; transform: scale(1.2); }
-.min-vh-75 { min-height: 75vh; }
-.avatar-glow {
-    filter: drop-shadow(0 0 8px var(--primary-glow));
-}
-</style>
 {% endblock %}

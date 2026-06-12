@@ -16,5 +16,26 @@ class User(UserMixin):
         return self.user_json.get('password')
 
     @property
+    def full_name(self):
+        return self.user_json.get('full_name', '')
+
+    @property
+    def first_name(self):
+        name = self.user_json.get('full_name', '')
+        return name.split()[0] if name else ''
+
+    @property
+    def company_name(self):
+        return self.user_json.get('company_name', '')
+
+    @property
+    def job_title(self):
+        return self.user_json.get('job_title', '')
+
+    @property
+    def phone(self):
+        return self.user_json.get('phone', '')
+
+    @property
     def is_admin(self):
         return self.user_json.get('is_admin', False)

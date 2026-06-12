@@ -1,44 +1,111 @@
 {% extends "layouts/base.html" %}
-
-{% block title %}Contact Us - Hire AI{% endblock %}
+{% block title %}Contact — Hire AI{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="card shadow-lg border-0">
-        <div class="card-body p-5">
-            <h1 class="mb-4 text-primary">Get in Touch</h1>
-            <p class="lead">We'd love to hear from you. Fill out the form below or contact us directly.</p>
-            
-            <hr class="my-4">
+<div style="max-width:900px;margin:0 auto;padding:3rem 0;">
 
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <h3 class="text-secondary">Contact Information</h3>
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-envelope me-2 text-primary"></i> <a href="mailto:info@hire-ai.com" class="text-decoration-none">info@hire-ai.com</a></li>
-                        <li><i class="fas fa-phone me-2 text-primary"></i> +1 (555) 123-4567</li>
-                        <li><i class="fas fa-map-marker-alt me-2 text-primary"></i> 123 AI Boulevard, Silicon Valley, CA 90210</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <form method="POST" action="{{ url_for('main.contact') }}">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Your Message</label>
-                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                </div>
-            </div>
+  <div class="text-center mb-5" data-aos="fade-up">
+    <div class="page-header-badge"><i class="fas fa-envelope" style="font-size:0.6rem;"></i> Contact</div>
+    <h1 class="hero-title mb-2">Get in touch</h1>
+    <p style="color:var(--color-text-2);max-width:440px;margin:0 auto;">Have a question or want to see Hire AI in action? We'd love to hear from you.</p>
+  </div>
+
+  <div class="row g-4" data-aos="fade-up" data-aos-delay="100">
+
+    <!-- Info -->
+    <div class="col-lg-4">
+      <div class="card p-4 h-100">
+        <h6 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--color-text-3);margin-bottom:1.5rem;">Contact Information</h6>
+
+        {% set info = [
+          ("fa-envelope", "Email", "info@hire-ai.com", "mailto:info@hire-ai.com"),
+          ("fa-phone", "Phone", "+1 (555) 123-4567", None),
+          ("fa-location-dot", "Office", "123 AI Blvd, Silicon Valley, CA", None),
+          ("fa-clock", "Hours", "Mon – Fri, 9 AM – 6 PM PST", None)
+        ] %}
+        {% for icon, label, value, href in info %}
+        <div class="d-flex gap-3 mb-4">
+          <div style="width:36px;height:36px;min-width:36px;border-radius:var(--radius-sm);background:var(--color-primary-bg);border:1px solid var(--emerald-100);display:flex;align-items:center;justify-content:center;color:var(--color-primary);font-size:0.8rem;">
+            <i class="fas {{ icon }}"></i>
+          </div>
+          <div>
+            <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-3);margin-bottom:2px;">{{ label }}</div>
+            {% if href %}
+            <a href="{{ href }}" style="font-size:0.85rem;font-weight:600;color:var(--color-primary);">{{ value }}</a>
+            {% else %}
+            <span style="font-size:0.85rem;font-weight:600;color:var(--color-text);">{{ value }}</span>
+            {% endif %}
+          </div>
         </div>
+        {% endfor %}
+
+        <div style="border-top:1px solid var(--color-border);padding-top:1.25rem;margin-top:auto;">
+          <p style="font-size:0.75rem;color:var(--color-text-3);margin-bottom:0.75rem;font-weight:600;">Follow us</p>
+          <div class="d-flex gap-2">
+            {% for icon in ["fa-linkedin-in", "fa-twitter", "fa-github"] %}
+            <a href="#" style="width:32px;height:32px;border-radius:var(--radius-sm);background:var(--color-surface-2);border:1px solid var(--color-border);display:flex;align-items:center;justify-content:center;color:var(--color-text-3);font-size:0.8rem;transition:var(--transition);"
+              onmouseenter="this.style.background='var(--color-primary)';this.style.borderColor='var(--color-primary)';this.style.color='#fff'"
+              onmouseleave="this.style.background='var(--color-surface-2)';this.style.borderColor='var(--color-border)';this.style.color='var(--color-text-3)'">
+              <i class="fab {{ icon }}"></i>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Form -->
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <p style="font-weight:700;font-size:0.95rem;margin:0;color:var(--color-text);">Send a message</p>
+            <p style="font-size:0.8rem;color:var(--color-text-3);margin:0;">We typically respond within one business day.</p>
+          </div>
+        </div>
+        <div class="card-body p-4">
+          <form method="POST" action="{{ url_for('main.contact') }}" id="contact-form" novalidate>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="form-label" for="c-name">Full Name <span class="req">*</span></label>
+                  <input type="text" class="form-control" id="c-name" name="name" placeholder="Jane Smith" required minlength="2" autocomplete="name">
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="form-label" for="c-email">Email Address <span class="req">*</span></label>
+                  <input type="email" class="form-control" id="c-email" name="email" placeholder="jane@company.com" required autocomplete="email">
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label class="form-label" for="c-subject">Subject</label>
+                  <input type="text" class="form-control" id="c-subject" name="subject" placeholder="How can we help?">
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group mb-0">
+                  <label class="form-label" for="c-message">Message <span class="req">*</span></label>
+                  <textarea class="form-control" id="c-message" name="message" rows="5" placeholder="Tell us about your needs..." required minlength="10" style="min-height:120px;"></textarea>
+                  <div class="invalid-feedback"></div>
+                  <div class="form-hint">Minimum 10 characters.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 mt-4">
+              <button type="submit" class="btn btn-primary btn-pill px-4">
+                <i class="fas fa-paper-plane"></i> Send message
+              </button>
+              <span style="font-size:0.78rem;color:var(--color-text-3);"><i class="fas fa-lock me-1"></i>Your info is private and secure.</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

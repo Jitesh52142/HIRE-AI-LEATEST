@@ -1,266 +1,260 @@
 {% extends "layouts/base.html" %}
-
-{% block title %}Setup: Phase {{ step_id }} - Hire AI{% endblock %}
-
-{% block styles %}
-<style>
-.wizard-progress-wrapper { margin-bottom: 2.5rem; display: block; width: 100%; }
-.wizard-progress-bar { height: 10px; background: var(--glass-border); border-radius: 20px; position: relative; overflow: hidden; width: 100%; display: block; }
-.wizard-progress-fill { height: 100%; background: var(--primary) !important; transition: width 0.8s ease; box-shadow: 0 0 20px var(--primary-glow); display: block; }
-.phase-indicator { display: flex !important; justify-content: space-between !important; margin-top: 1rem; width: 100%; }
-.phase-item { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); transition: color 0.3s ease; }
-.phase-item.active { color: var(--primary) !important; }
-
-.wizard-card { border-radius: 30px; border: 1px solid var(--glass-border); background: var(--bg-white); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-.btn-wizard { padding: 14px 40px; border-radius: 50px; font-weight: 800; transition: all 0.3s ease; border: none; }
-.btn-next { background: var(--primary) !important; color: #fff !important; box-shadow: 0 10px 20px -10px var(--primary); }
-.btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -10px var(--primary); }
-.btn-prev { background: var(--bg-light); color: var(--text-muted); border: 1px solid var(--glass-border); }
-.btn-prev:hover { background: var(--bg-white); color: var(--text-main); border-color: var(--primary); }
-.step-header { border-bottom: 1px solid var(--glass-border); padding-bottom: 1.5rem; margin-bottom: 2rem; }
-.step-badge { background: var(--primary-glow); color: var(--primary); padding: 5px 15px; border-radius: 50px; font-weight: 700; font-size: 0.75rem; display: inline-block; margin-bottom: 0.5rem; border: 1px solid var(--primary); }
-
-.form-label { font-weight: 700; color: var(--text-main) !important; margin-bottom: 0.5rem; font-size: 0.95rem; }
-.form-control, .form-select { padding: 12px 18px; border-radius: 12px; background: var(--bg-white); border: 1px solid var(--glass-border); font-weight: 500; color: var(--text-main); }
-.form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); color: var(--text-main); background: var(--bg-white) !important; }
-
-/* Dashboard Dark Mode Forcing */
-body.dark-mode .wizard-card { background: var(--glass-bg) !important; }
-body.dark-mode .btn-prev { background: transparent !important; color: var(--text-main) !important; border: 1px solid var(--glass-border); }
-body.dark-mode .btn-prev:hover { border-color: var(--primary); color: var(--primary) !important; }
-body.dark-mode .form-control, body.dark-mode .form-select { background: rgba(30,41,59,0.8) !important; color: #fff !important; }
-body.dark-mode .form-label, body.dark-mode .text-muted.small { color: #f8fafc !important; }
-body.dark-mode .phase-item { color: #94a3b8 !important; }
-body.dark-mode .phase-item.active { color: var(--primary) !important; }
-
-.pulse-loader { animation: pulse 2s infinite; }
-@keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
-</style>
-{% endblock %}
+{% block title %}Campaign Setup: Step {{ step_id }} — Hire AI{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center py-5">
-    <div class="col-lg-9">
-        <!-- Unified Progress Tracker -->
-        <div class="wizard-progress-wrapper" data-aos="fade-down">
-            <div class="wizard-progress-bar">
-                <div class="wizard-progress-fill" style="width: {{ step_id * 20 }}%"></div>
-            </div>
-            <div class="phase-indicator">
-                <span class="phase-item {% if step_id >= 1 %}active{% endif %}">Foundations</span>
-                <span class="phase-item {% if step_id >= 2 %}active{% endif %}">Stakeholder</span>
-                <span class="phase-item {% if step_id >= 3 %}active{% endif %}">Role</span>
-                <span class="phase-item {% if step_id >= 4 %}active{% endif %}">Budget</span>
-                <span class="phase-item {% if step_id >= 5 %}active{% endif %}">Deploy</span>
-            </div>
-        </div>
+<div class="wizard-wrap">
 
-        <div class="card wizard-card shadow-2xl overflow-hidden" data-aos="zoom-in">
-            <div class="card-body p-4 p-md-5">
-                <form method="POST">
-                    
-                    {% if step_id == 1 %}
-                    <!-- Phase 1: Company Profile -->
-                    <div class="step-header">
-                        <span class="step-badge">Phase 01</span>
-                        <h2 class="fw-800 mb-0">The Core Foundation</h2>
-                        <p class="text-muted small mt-1">Briefly outline your organization for the AI matching engine.</p>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="form-label">Company Name</label>
-                            <input type="text" class="form-control" name="CompanyName" value="{{ draft.get('CompanyName', '') }}" placeholder="InnovaLogic Systems" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Website URL</label>
-                            <input type="url" class="form-control" name="CompanyWebsite" value="{{ draft.get('CompanyWebsite', '') }}" placeholder="https://..." required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Office Location</label>
-                            <input type="text" class="form-control" name="CompanyAddress" value="{{ draft.get('CompanyAddress', '') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Core Industry</label>
-                            <input type="text" class="form-control" name="CompanyIndustry" value="{{ draft.get('CompanyIndustry', '') }}" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Description & Mission</label>
-                            <textarea class="form-control" name="CompanyDescriptionAndMission" rows="3" required>{{ draft.get('CompanyDescriptionAndMission', '') }}</textarea>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Culture & Core Values</label>
-                            <textarea class="form-control" name="CompanyCultureAndValues" rows="2" required>{{ draft.get('CompanyCultureAndValues', '') }}</textarea>
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    {% if step_id == 2 %}
-                    <!-- Phase 2: Contact Details -->
-                    <div class="step-header">
-                        <span class="step-badge">Phase 02</span>
-                        <h2 class="fw-800 mb-0">HR Lead & Stakeholder</h2>
-                        <p class="text-muted small mt-1">Who will lead this recruitment from your end?</p>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="form-label">Stakeholder Name</label>
-                            <input type="text" class="form-control" name="fullName" value="{{ draft.get('fullName', '') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Job Title (e.g. Talent Lead)</label>
-                            <input type="text" class="form-control" name="hrTitle" value="{{ draft.get('hrTitle', '') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Work Email Address</label>
-                            <input type="email" class="form-control" name="hrEmail" value="{{ draft.get('hrEmail', '') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" name="hrPhone" value="{{ draft.get('hrPhone', '') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">LinkedIn Profile URL</label>
-                            <input type="url" class="form-control" name="hrLinkedIn" value="{{ draft.get('hrLinkedIn', '') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Timezone</label>
-                            <input type="text" class="form-control" name="preferredTimezone" value="{{ draft.get('preferredTimezone', '') }}" required>
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    {% if step_id == 3 %}
-                    <!-- Phase 3: The Position -->
-                    <div class="step-header">
-                        <span class="step-badge">Phase 03</span>
-                        <h2 class="fw-800 mb-0">Defining the Position</h2>
-                        <p class="text-muted small mt-1">Details on the specific role you need to fill.</p>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-md-8">
-                            <label class="form-label">Position Title</label>
-                            <input type="text" class="form-control" name="PositionTitle" value="{{ draft.get('PositionTitle', '') }}" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Department</label>
-                            <input type="text" class="form-control" name="Department" value="{{ draft.get('Department', '') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Work Mode</label>
-                            <select class="form-select" name="WorkMode">
-                                <option {% if draft.get('WorkMode') == 'Remote' %}selected{% endif %}>Remote</option>
-                                <option {% if draft.get('WorkMode') == 'Hybrid' %}selected{% endif %}>Hybrid</option>
-                                <option {% if draft.get('WorkMode') == 'On-site' %}selected{% endif %}>On-site</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Job Type</label>
-                            <select class="form-select" name="JobType">
-                                <option {% if draft.get('JobType') == 'Full-time' %}selected{% endif %}>Full-time</option>
-                                <option {% if draft.get('JobType') == 'Part-time' %}selected{% endif %}>Part-time</option>
-                                <option {% if draft.get('JobType') == 'Contract' %}selected{% endif %}>Contract</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Experience Required</label>
-                            <input type="text" class="form-control" name="ExperienceRequired" value="{{ draft.get('ExperienceRequired', '') }}" placeholder="e.g. 1-3 Years" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Location</label>
-                            <input type="text" class="form-control" name="Location" value="{{ draft.get('Location', '') }}" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Education / Academic Requirements</label>
-                            <input type="text" class="form-control" name="EducationRequirements" value="{{ draft.get('EducationRequirements', '') }}" required>
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    {% if step_id == 4 %}
-                    <!-- Phase 4: Compensation & Tech -->
-                    <div class="step-header">
-                        <span class="step-badge">Phase 04</span>
-                        <h2 class="fw-800 mb-0">Compensation & Tech Stack</h2>
-                        <p class="text-muted small mt-1">Set the mandatory standards for candidates.</p>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-md-4">
-                            <label class="form-label">Currency</label>
-                            <input type="text" class="form-control" name="Currency" value="{{ draft.get('Currency', 'INR') }}" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Minimum Salary</label>
-                            <input type="number" class="form-control" name="MinimumSalary" value="{{ draft.get('MinimumSalary', '') }}" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Maximum Salary</label>
-                            <input type="number" class="form-control" name="MaximumSalary" value="{{ draft.get('MaximumSalary', '') }}" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Mandatory Skills (Comma separated)</label>
-                            <textarea class="form-control" name="RequiredSkillsAndExperience" rows="2" required>{{ draft.get('RequiredSkillsAndExperience', '') }}</textarea>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Nice to Have Skills</label>
-                            <input type="text" class="form-control" name="NiceToHaveSkills" value="{{ draft.get('NiceToHaveSkills', '') }}">
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    {% if step_id == 5 %}
-                    <!-- Phase 5: Finalization -->
-                    <div class="step-header">
-                        <span class="step-badge">Phase 05</span>
-                        <h2 class="fw-800 mb-0">Review & Launch Campaign</h2>
-                        <p class="text-muted small mt-1">Final context for the AI search agents.</p>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-md-12">
-                            <label class="form-label">Interview Process (Pipe separated)</label>
-                            <input type="text" class="form-control" name="InterviewProcess" value="{{ draft.get('InterviewProcess', '') }}" placeholder="Step 1 | Step 2 | Step 3" required>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Benefits & Perks</label>
-                            <textarea class="form-control" name="BenefitsAndPerks" rows="2">{{ draft.get('BenefitsAndPerks', '') }}</textarea>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Key Responsibilities</label>
-                            <textarea class="form-control" name="KeyResponsibilities" rows="3" required>{{ draft.get('KeyResponsibilities', '') }}</textarea>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Expected Start Date</label>
-                            <input type="date" class="form-control" name="ExpectedStartDate" value="{{ draft.get('ExpectedStartDate', '') }}" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Hiring Urgency</label>
-                            <select class="form-select" name="HiringUrgency">
-                                <option {% if draft.get('HiringUrgency') == 'Immediate' %}selected{% endif %}>Immediate</option>
-                                <option {% if draft.get('HiringUrgency') == 'Flexible' %}selected{% endif %}>Flexible</option>
-                            </select>
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    <div class="d-flex justify-content-between mt-5">
-                        {% if step_id > 1 %}
-                        <a href="{{ url_for('dashboard.setup_step', step_id=step_id-1) }}" class="btn btn-wizard btn-prev">
-                            <i class="fas fa-arrow-left me-2"></i> Previous
-                        </a>
-                        {% else %}
-                        <div></div>
-                        {% endif %}
-
-                        <button type="submit" class="btn btn-wizard btn-next">
-                            {% if step_id == 5 %}
-                                <i class="fas fa-rocket me-2"></i> COMPLETE & LAUNCH
-                            {% else %}
-                                Next Phase: {% if step_id == 1 %}Stakeholder{% elif step_id == 2 %}The Role{% elif step_id == 3 %}Budget{% elif step_id == 4 %}Deployment{% endif %} <i class="fas fa-arrow-right ms-2"></i>
-                            {% endif %}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+  <!-- Step tracker -->
+  <div class="wizard-stepper" data-aos="fade-down">
+    {% set steps = ["Foundations", "Stakeholder", "Role", "Budget", "Deploy"] %}
+    {% for s in steps %}
+    {% set si = loop.index %}
+    <div class="wizard-step {% if si < step_id %}done{% elif si == step_id %}active{% endif %}">
+      <div class="step-dot">
+        {% if si < step_id %}<i class="fas fa-check" style="font-size:0.6rem;"></i>
+        {% else %}{{ si }}{% endif %}
+      </div>
+      <span class="step-label">{{ s }}</span>
     </div>
-</div>
+    {% endfor %}
+  </div>
+
+  <!-- Wizard card -->
+  <div class="wizard-card" data-aos="fade-up">
+
+    <!-- Card header -->
+    <div class="wizard-card-header">
+      {% if step_id == 1 %}
+        <div class="wizard-phase-tag"><i class="fas fa-building" style="font-size:0.6rem;"></i> Phase 1 of 5</div>
+        <h2 class="wizard-card-title">Company Foundation</h2>
+        <p class="wizard-card-subtitle">Tell us about your organization so the AI can find the right fit.</p>
+      {% elif step_id == 2 %}
+        <div class="wizard-phase-tag"><i class="fas fa-user-tie" style="font-size:0.6rem;"></i> Phase 2 of 5</div>
+        <h2 class="wizard-card-title">HR Lead & Stakeholder</h2>
+        <p class="wizard-card-subtitle">Who will be leading this recruitment from your end?</p>
+      {% elif step_id == 3 %}
+        <div class="wizard-phase-tag"><i class="fas fa-briefcase" style="font-size:0.6rem;"></i> Phase 3 of 5</div>
+        <h2 class="wizard-card-title">Defining the Position</h2>
+        <p class="wizard-card-subtitle">Details about the specific role you need to fill.</p>
+      {% elif step_id == 4 %}
+        <div class="wizard-phase-tag"><i class="fas fa-coins" style="font-size:0.6rem;"></i> Phase 4 of 5</div>
+        <h2 class="wizard-card-title">Compensation & Tech Stack</h2>
+        <p class="wizard-card-subtitle">Set the compensation range and skill requirements.</p>
+      {% elif step_id == 5 %}
+        <div class="wizard-phase-tag"><i class="fas fa-rocket" style="font-size:0.6rem;"></i> Phase 5 of 5</div>
+        <h2 class="wizard-card-title">Review & Launch</h2>
+        <p class="wizard-card-subtitle">Final context for the AI search agents. Almost there!</p>
+      {% endif %}
+    </div>
+
+    <!-- Form body -->
+    <form method="POST" id="wizard-form" novalidate>
+      <div class="wizard-card-body">
+
+        {% if step_id == 1 %}
+        <div class="field-group cols-2">
+          <div>
+            <label class="form-label">Company Name <span class="req">*</span></label>
+            <input type="text" class="form-control" name="CompanyName" value="{{ draft.get('CompanyName','') }}" placeholder="e.g. InnovaLogic Systems" required minlength="2">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Website URL <span class="req">*</span></label>
+            <input type="url" class="form-control" name="CompanyWebsite" value="{{ draft.get('CompanyWebsite','') }}" placeholder="https://yourcompany.com" required>
+            <div class="invalid-feedback"></div>
+            <div class="form-hint">Must start with https://</div>
+          </div>
+          <div>
+            <label class="form-label">Office Location <span class="req">*</span></label>
+            <input type="text" class="form-control" name="CompanyAddress" value="{{ draft.get('CompanyAddress','') }}" placeholder="City, Country" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Core Industry <span class="req">*</span></label>
+            <input type="text" class="form-control" name="CompanyIndustry" value="{{ draft.get('CompanyIndustry','') }}" placeholder="e.g. FinTech, HealthTech" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="field-span-2">
+            <label class="form-label">Description & Mission <span class="req">*</span></label>
+            <textarea class="form-control" name="CompanyDescriptionAndMission" rows="3" placeholder="What does your company do and what is your mission?" required>{{ draft.get('CompanyDescriptionAndMission','') }}</textarea>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="field-span-2">
+            <label class="form-label">Culture & Core Values <span class="req">*</span></label>
+            <textarea class="form-control" name="CompanyCultureAndValues" rows="2" placeholder="e.g. Innovation, Transparency, Customer-first..." required>{{ draft.get('CompanyCultureAndValues','') }}</textarea>
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+
+        {% elif step_id == 2 %}
+        <div class="field-group cols-2">
+          <div>
+            <label class="form-label">Full Name <span class="req">*</span></label>
+            <input type="text" class="form-control" name="fullName" value="{{ draft.get('fullName','') }}" placeholder="e.g. Sarah Johnson" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Job Title <span class="req">*</span></label>
+            <input type="text" class="form-control" name="hrTitle" value="{{ draft.get('hrTitle','') }}" placeholder="e.g. Head of Talent Acquisition" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Work Email <span class="req">*</span></label>
+            <input type="email" class="form-control" name="hrEmail" value="{{ draft.get('hrEmail','') }}" placeholder="sarah@company.com" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Phone Number <span class="req">*</span></label>
+            <input type="tel" class="form-control" name="hrPhone" value="{{ draft.get('hrPhone','') }}" placeholder="+1 (555) 000-0000" required>
+            <div class="invalid-feedback"></div>
+            <div class="form-hint">Include country code</div>
+          </div>
+          <div>
+            <label class="form-label">LinkedIn Profile <span class="req">*</span></label>
+            <input type="url" class="form-control" name="hrLinkedIn" value="{{ draft.get('hrLinkedIn','') }}" placeholder="https://linkedin.com/in/..." required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Timezone <span class="req">*</span></label>
+            <input type="text" class="form-control" name="preferredTimezone" value="{{ draft.get('preferredTimezone','') }}" placeholder="e.g. IST, EST, PST" required>
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+
+        {% elif step_id == 3 %}
+        <div class="field-group cols-2">
+          <div style="grid-column:span 2 / span 2;">
+            <label class="form-label">Position Title <span class="req">*</span></label>
+            <input type="text" class="form-control" name="PositionTitle" value="{{ draft.get('PositionTitle','') }}" placeholder="e.g. Senior Backend Engineer" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Department <span class="req">*</span></label>
+            <input type="text" class="form-control" name="Department" value="{{ draft.get('Department','') }}" placeholder="e.g. Engineering" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Experience Required <span class="req">*</span></label>
+            <input type="text" class="form-control" name="ExperienceRequired" value="{{ draft.get('ExperienceRequired','') }}" placeholder="e.g. 3–5 Years" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Work Mode</label>
+            <select class="form-select" name="WorkMode">
+              <option {% if draft.get('WorkMode')=='Remote' %}selected{% endif %}>Remote</option>
+              <option {% if draft.get('WorkMode')=='Hybrid' %}selected{% endif %}>Hybrid</option>
+              <option {% if draft.get('WorkMode')=='On-site' %}selected{% endif %}>On-site</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Job Type</label>
+            <select class="form-select" name="JobType">
+              <option {% if draft.get('JobType')=='Full-time' %}selected{% endif %}>Full-time</option>
+              <option {% if draft.get('JobType')=='Part-time' %}selected{% endif %}>Part-time</option>
+              <option {% if draft.get('JobType')=='Contract' %}selected{% endif %}>Contract</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Job Location <span class="req">*</span></label>
+            <input type="text" class="form-control" name="Location" value="{{ draft.get('Location','') }}" placeholder="e.g. Bangalore, India" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Education Requirements <span class="req">*</span></label>
+            <input type="text" class="form-control" name="EducationRequirements" value="{{ draft.get('EducationRequirements','') }}" placeholder="e.g. B.Tech CS or equivalent" required>
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+
+        {% elif step_id == 4 %}
+        <div class="field-group cols-3">
+          <div>
+            <label class="form-label">Currency <span class="req">*</span></label>
+            <input type="text" class="form-control" name="Currency" value="{{ draft.get('Currency','INR') }}" placeholder="INR / USD / EUR" required maxlength="5">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Minimum Salary <span class="req">*</span></label>
+            <input type="number" class="form-control" name="MinimumSalary" value="{{ draft.get('MinimumSalary','') }}" placeholder="e.g. 800000" required min="0">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div>
+            <label class="form-label">Maximum Salary <span class="req">*</span></label>
+            <input type="number" class="form-control" name="MaximumSalary" value="{{ draft.get('MaximumSalary','') }}" placeholder="e.g. 1500000" required min="0">
+            <div class="invalid-feedback"></div>
+            <div class="form-hint">Must be ≥ minimum</div>
+          </div>
+          <div style="grid-column:1/-1;">
+            <label class="form-label">Mandatory Skills <span class="req">*</span></label>
+            <textarea class="form-control" name="RequiredSkillsAndExperience" rows="3" placeholder="Python, Django, PostgreSQL, REST APIs, Docker&#10;Separate each skill with a comma." required>{{ draft.get('RequiredSkillsAndExperience','') }}</textarea>
+            <div class="invalid-feedback"></div>
+            <div class="form-hint">Comma-separated list of required skills.</div>
+          </div>
+          <div style="grid-column:1/-1;">
+            <label class="form-label">Nice-to-Have Skills</label>
+            <input type="text" class="form-control" name="NiceToHaveSkills" value="{{ draft.get('NiceToHaveSkills','') }}" placeholder="e.g. Kubernetes, GraphQL, Redis">
+            <div class="form-hint">Optional — bonus skills, not required.</div>
+          </div>
+        </div>
+
+        {% elif step_id == 5 %}
+        <div class="field-group">
+          <div>
+            <label class="form-label">Interview Process <span class="req">*</span></label>
+            <input type="text" class="form-control" name="InterviewProcess" value="{{ draft.get('InterviewProcess','') }}" placeholder="HR Screen | Technical Round | System Design | Offer" required>
+            <div class="invalid-feedback"></div>
+            <div class="form-hint">Separate each stage with a pipe ( | )</div>
+          </div>
+          <div>
+            <label class="form-label">Benefits & Perks</label>
+            <textarea class="form-control" name="BenefitsAndPerks" rows="2" placeholder="Health insurance, flexible hours, remote work allowance, stock options...">{{ draft.get('BenefitsAndPerks','') }}</textarea>
+          </div>
+          <div>
+            <label class="form-label">Key Responsibilities <span class="req">*</span></label>
+            <textarea class="form-control" name="KeyResponsibilities" rows="4" placeholder="Describe the core responsibilities for this role..." required>{{ draft.get('KeyResponsibilities','') }}</textarea>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="field-group cols-2" style="gap:1rem;margin:0;">
+            <div>
+              <label class="form-label">Expected Start Date <span class="req">*</span></label>
+              <input type="date" class="form-control" name="ExpectedStartDate" value="{{ draft.get('ExpectedStartDate','') }}" required>
+              <div class="invalid-feedback"></div>
+            </div>
+            <div>
+              <label class="form-label">Hiring Urgency</label>
+              <select class="form-select" name="HiringUrgency">
+                <option {% if draft.get('HiringUrgency')=='Immediate' %}selected{% endif %}>Immediate</option>
+                <option {% if draft.get('HiringUrgency')=='Flexible' %}selected{% endif %}>Flexible</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+      </div><!-- /wizard-card-body -->
+
+      <!-- Footer nav -->
+      <div class="wizard-card-footer">
+        {% if step_id > 1 %}
+        <a href="{{ url_for('dashboard.setup_step', step_id=step_id-1) }}" class="btn-wizard-prev">
+          <i class="fas fa-arrow-left"></i> Back
+        </a>
+        {% else %}
+        <div></div>
+        {% endif %}
+
+        <span class="step-counter">Step {{ step_id }} of 5</span>
+
+        <button type="submit" class="btn-wizard-next">
+          {% if step_id == 5 %}
+            <i class="fas fa-rocket"></i> Launch Campaign
+          {% else %}
+            Continue <i class="fas fa-arrow-right"></i>
+          {% endif %}
+        </button>
+      </div>
+    </form>
+
+  </div><!-- /wizard-card -->
+</div><!-- /wizard-wrap -->
 {% endblock %}

@@ -1,306 +1,106 @@
 {% extends "layouts/base.html" %}
-
-{% block title %}Hiring Insights - Hire AI{% endblock %}
-
-{% block styles %}
-<style>
-/* Wizard Container and Flow Styling */
-.wizard-container {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.wizard-progress-wrapper {
-    margin-bottom: 2rem;
-    padding: 0 1rem;
-}
-
-.wizard-progress-bar {
-    height: 8px;
-    background: var(--glass-border);
-    border-radius: 10px;
-    position: relative;
-    overflow: hidden;
-}
-
-.wizard-progress-fill {
-    height: 100%;
-    background: var(--primary);
-    width: 20%; /* Initial width for step 1 */
-    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 0 15px var(--primary-glow);
-}
-
-.phase-indicator {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-}
-
-.phase-item {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    transition: var(--transition);
-}
-
-.phase-item.active {
-    color: var(--primary);
-}
-
-/* Page-like Step Styling */
-.form-page {
-    display: none;
-    opacity: 0;
-    transform: translateX(30px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.form-page.active {
-    display: block;
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.wizard-card {
-    border-radius: 30px;
-    border: 1px solid var(--glass-border);
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-}
-
-.step-label-badge {
-    background: var(--primary-bg);
-    color: var(--primary);
-    padding: 6px 16px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    display: inline-block;
-    margin-bottom: 1rem;
-}
-
-.btn-wizard {
-    padding: 12px 35px;
-    border-radius: 50px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-}
-
-.btn-next {
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    box-shadow: 0 10px 20px -5px var(--primary-glow);
-}
-
-.btn-next:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 25px -5px var(--primary-glow);
-    color: #fff;
-}
-
-.btn-prev {
-    background: transparent;
-    border: 1px solid var(--glass-border);
-    color: var(--text-muted);
-}
-
-.btn-prev:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: var(--text-main);
-}
-
-.premium-input-group {
-    margin-bottom: 1.8rem;
-}
-
-.premium-input-group label {
-    display: block;
-    margin-bottom: 0.6rem;
-    font-weight: 700;
-    color: var(--text-main);
-    font-size: 0.95rem;
-}
-
-.premium-input-group .form-control, .premium-input-group .form-select {
-    padding: 14px 20px;
-    border-radius: 15px;
-    background: #fcfcfc;
-    border: 1px solid #eee;
-    font-weight: 500;
-    transition: border-color 0.3s ease;
-}
-
-.premium-input-group .form-control:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px var(--primary-bg);
-}
-
-.form-header-title {
-    font-family: 'Outfit', sans-serif;
-    font-weight: 800;
-    color: var(--secondary);
-    margin-bottom: 0.5rem;
-}
-
-/* Candidate Card Styling */
-.candidate-card-premium { border-radius: 24px; transition: var(--transition); border: 1px solid var(--glass-border); background: #fff; }
-.candidate-card-premium:hover { transform: translateY(-10px); }
-.candidate-avatar { filter: drop-shadow(0 0 5px var(--primary-glow)); }
-.small-info-item { background: #f8fafc; padding: 10px; border-radius: 14px; text-align: center; }
-.small-info-item .label { display: block; font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 2px; }
-.small-info-item .value { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
-.fs-xs { font-size: 0.75rem; }
-
-/* Dark Mode Fallbacks */
-body.dark-mode .candidate-card-premium { background: var(--glass-bg) !important; }
-body.dark-mode .small-info-item { background: rgba(30, 41, 59, 0.5) !important; }
-body.dark-mode .small-info-item .label { color: #cbd5e1 !important; }
-body.dark-mode .small-info-item .value { color: #f8fafc !important; }
-</style>
-{% endblock %}
+{% block title %}Candidate Insights — Hire AI{% endblock %}
 
 {% block content %}
 {% if candidates %}
-<div class="row g-4 mt-5">
-    <div class="col-12 mb-4" data-aos="fade-up">
-        <div class="d-flex align-items-center justify-content-between">
-            <h2 class="fw-800 mb-0">Candidate Insights</h2>
-            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 px-3 py-2">{{ candidates|length }} Matches Found</span>
+
+<!-- Header -->
+<div class="d-flex align-items-center justify-content-between py-4 mb-2" data-aos="fade-down">
+  <div>
+    <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:4px;">Candidate Insights</h1>
+    <p style="color:var(--color-text-2);font-size:0.875rem;margin:0;">AI-scored talent matched to your latest campaign requirements</p>
+  </div>
+  <span class="badge badge-emerald" style="font-size:0.8rem;padding:6px 14px;">
+    <i class="fas fa-users" style="font-size:0.65rem;"></i>
+    {{ candidates|length }} match{{ 'es' if candidates|length != 1 else '' }}
+  </span>
+</div>
+
+<!-- Grid -->
+<div class="row g-3 pb-4">
+  {% for candidate in candidates %}
+  <div class="col-md-6 col-xl-4" data-aos="fade-up" data-aos-delay="{{ [loop.index0 * 60, 300]|min }}">
+    <div class="candidate-card h-100">
+
+      <!-- Card header -->
+      <div class="candidate-card-header">
+        <div class="d-flex align-items-center gap-3">
+          <div class="candidate-avatar-wrap">
+            <i class="fas fa-user"></i>
+          </div>
+          <div style="min-width:0;flex:1;">
+            <h6 style="font-weight:700;margin:0;font-size:0.925rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--color-text);">
+              {{ candidate.get('Full Name', 'Unknown Candidate') }}
+            </h6>
+            <span class="badge badge-slate" style="font-size:0.65rem;margin-top:3px;">Candidate Response</span>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:1.1rem;font-weight:800;color:var(--color-primary);line-height:1;">{{ candidate.get('score_pct', 0) }}%</div>
+            <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-3);font-weight:600;">Score</div>
+          </div>
         </div>
-        <p class="text-muted">AI-scored talent based on your recent campaign requirements</p>
-    </div>
+      </div>
 
-    {% for candidate in candidates %}
-    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
-        <div class="card h-100 shadow-xl candidate-card-premium">
-            <div class="card-body p-4">
-                <div class="d-flex align-items-center mb-4">
-                    <div class="candidate-avatar me-3">
-                        <i class="fas fa-file-contract fs-1 text-primary"></i>
-                    </div>
-                    <div>
-                        <h5 class="mb-0 fw-800 text-dark text-truncate" style="max-width: 200px;">{{ candidate.get('Full Name', 'No Name') }}</h5>
-                        <p class="mb-0 small text-muted badge bg-light">Candidate Response</p>
-                    </div>
-                </div>
+      <!-- Card body -->
+      <div class="candidate-card-body">
+        <!-- Progress -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span style="font-size:0.75rem;font-weight:600;color:var(--color-text-2);">Quiz Score</span>
+            <span style="font-size:0.75rem;font-weight:700;color:var(--color-primary);">{{ candidate.get('score_pct', 0) }}%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill {% if candidate.get('score_pct', 0)|int < 50 %}warn{% endif %}" style="width:{{ candidate.get('score_pct', 0) }}%;"></div>
+          </div>
+        </div>
 
-                <div class="expertise-meter mb-3">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="small fw-bold">Quiz Score</span>
-                        <span class="small text-primary fw-800">{{ candidate.get('score_pct', 0) }}%</span>
-                    </div>
-                    <div class="progress" style="height: 10px; border-radius: 10px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ candidate.get('score_pct', 0) }}%"></div>
-                    </div>
-                </div>
-
-                <div class="row g-2 mb-4">
-                    <div class="col-7">
-                        <div class="small-info-item text-start px-3">
-                            <span class="label">Email Address</span>
-                            <span class="value text-truncate d-block">{{ candidate.get('Email Address', 'N/A') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <div class="small-info-item">
-                            <span class="label">Mobile</span>
-                            <span class="value text-truncate d-block">{{ candidate.get('Mobile Number', 'N/A') }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <a href="{{ url_for('candidates.response_score', email=candidate.get('Email Address', '')|trim) }}" class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold">
-                    View Full Insight <i class="fas fa-arrow-right ms-2 fs-xs"></i>
-                </a>
+        <!-- Info chips -->
+        <div class="row g-2">
+          <div class="col-7">
+            <div class="info-chip">
+              <span class="ic-label">Email</span>
+              <span class="ic-value">{{ candidate.get('Email Address', 'N/A') }}</span>
             </div>
+          </div>
+          <div class="col-5">
+            <div class="info-chip">
+              <span class="ic-label">Mobile</span>
+              <span class="ic-value">{{ candidate.get('Mobile Number', 'N/A') }}</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Card footer -->
+      <div class="candidate-card-footer">
+        <a href="{{ url_for('candidates.response_score', email=candidate.get('Email Address', '')|trim) }}"
+          class="btn btn-outline-primary btn-sm btn-pill w-100" style="justify-content:center;">
+          View full analysis <i class="fas fa-arrow-right" style="font-size:0.7rem;"></i>
+        </a>
+      </div>
+
     </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
 </div>
 
 {% else %}
-<div class="row justify-content-center py-5">
-    <div class="col-lg-8 text-center" data-aos="zoom-in">
-        <div class="glass-card p-5 rounded-5 border border-primary border-opacity-10 shadow-3xl bg-white bg-opacity-70">
-            <div class="mb-4">
-                <i class="fas fa-rocket fs-1 text-primary pulse"></i>
-            </div>
-            <h2 class="fw-800 mb-3">No Active Campaign</h2>
-            <p class="text-muted fs-5 mb-5 mx-auto max-w-500">Deploy your first AI agent swarm to begin scouting for world-class talent matched to your specific needs.</p>
-            <a href="{{ url_for('dashboard.main_dashboard') }}" class="btn btn-primary px-5 py-3 rounded-pill fw-800 shadow-xl btn-launch-now transition-all">
-                <i class="fas fa-plus-circle me-2"></i> START NEW SETUP
-            </a>
-        </div>
+
+<!-- Empty state -->
+<div style="min-height:60vh;display:flex;align-items:center;justify-content:center;" data-aos="fade-up">
+  <div style="text-align:center;max-width:460px;padding:3rem 1rem;">
+    <div style="width:72px;height:72px;border-radius:var(--radius-xl);background:var(--color-primary-bg);border:1px solid var(--emerald-100);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;color:var(--color-primary);font-size:1.75rem;">
+      <i class="fas fa-magnifying-glass-chart"></i>
     </div>
+    <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:0.75rem;">No active campaign</h2>
+    <p style="color:var(--color-text-2);font-size:0.9rem;line-height:1.65;margin-bottom:2rem;">
+      Deploy your first AI-powered hiring campaign to start seeing matched candidates here.
+    </p>
+    <a href="{{ url_for('dashboard.main_dashboard') }}" class="btn btn-primary btn-pill px-4">
+      <i class="fas fa-plus"></i> Start new campaign
+    </a>
+  </div>
 </div>
 
-<style>
-.max-w-500 { max-width: 500px; }
-.btn-launch-now:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 40px -10px var(--primary-glow); }
-.pulse { animation: pulse 2s infinite; }
-@keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
-</style>
 {% endif %}
-{% endblock %}
-
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const pages = document.querySelectorAll('.form-page');
-    const progressFill = document.getElementById('progressFill');
-    const phaseItems = document.querySelectorAll('.phase-item');
-    const nextBtns = document.querySelectorAll('.next-btn');
-    const prevBtns = document.querySelectorAll('.prev-btn');
-    let currentPageIdx = 0;
-
-    function updateWizard() {
-        if(!pages.length) return;
-        pages.forEach((page, idx) => {
-            idx === currentPageIdx ? page.classList.add('active') : page.classList.remove('active');
-        });
-        const progressPercent = ((currentPageIdx + 1) / pages.length) * 100;
-        if(progressFill) progressFill.style.width = progressPercent + '%';
-        phaseItems.forEach((item, idx) => {
-            idx <= currentPageIdx ? item.classList.add('active') : item.classList.remove('active');
-        });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    nextBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const currentInputs = pages[currentPageIdx].querySelectorAll('input[required], textarea[required], select[required]');
-            let isValid = true;
-            currentInputs.forEach(input => {
-                if(!input.value) {
-                    input.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    input.classList.remove('is-invalid');
-                }
-            });
-            if (isValid && currentPageIdx < pages.length - 1) {
-                currentPageIdx++;
-                updateWizard();
-            }
-        });
-    });
-
-    prevBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (currentPageIdx > 0) {
-                currentPageIdx--;
-                updateWizard();
-            }
-        });
-    });
-
-    updateWizard();
-});
-</script>
 {% endblock %}

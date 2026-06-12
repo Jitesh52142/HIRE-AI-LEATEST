@@ -1,89 +1,288 @@
 {% extends "layouts/base.html" %}
+{% block title %}Log In — Hire AI{% endblock %}
 
-{% block title %}Login - Hire AI{% endblock %}
+{% block styles %}
+<style>
+  .auth-split {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: stretch;
+  }
+
+  /* Left panel */
+  .auth-panel-left {
+    width: 420px;
+    min-width: 420px;
+    background: linear-gradient(160deg, #0a1628 0%, #0f2a1e 60%, #0b1f14 100%);
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .auth-panel-left::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 20%, rgba(16,185,129,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(52,211,153,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .left-logo { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
+  .left-logo-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #10b981, #047857);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1rem;
+    box-shadow: 0 4px 14px rgba(16,185,129,0.4);
+  }
+  .left-logo-name { font-family: 'Outfit',sans-serif; font-size: 1.3rem; font-weight: 800; color: #fff; }
+
+  .left-content { position: relative; z-index: 1; }
+  .left-headline {
+    font-family: 'Outfit',sans-serif;
+    font-size: 1.75rem; font-weight: 800; color: #fff;
+    line-height: 1.2; letter-spacing: -0.03em; margin-bottom: 1rem;
+  }
+  .left-headline span {
+    background: linear-gradient(135deg, #34d399, #10b981);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .left-desc { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.65; margin-bottom: 2rem; }
+
+  /* Testimonial card */
+  .testimonial-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 1.25rem;
+  }
+  .testimonial-text { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 1rem; font-style: italic; }
+  .testimonial-author { display: flex; align-items: center; gap: 10px; }
+  .tauthor-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #047857);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+  }
+  .tauthor-name  { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+  .tauthor-title { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+
+  .left-footer { font-size: 0.75rem; color: rgba(255,255,255,0.3); position: relative; z-index: 1; }
+  .left-footer a { color: rgba(255,255,255,0.45); }
+
+  /* Right panel */
+  .auth-panel-right {
+    flex: 1;
+    background: var(--color-bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 3rem 2rem;
+  }
+
+  .login-form-wrap { width: 100%; max-width: 420px; }
+
+  .login-form-wrap h1 {
+    font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em;
+    color: var(--color-text); margin-bottom: 4px;
+  }
+  .login-form-wrap .sub { font-size: 0.875rem; color: var(--color-text-2); margin-bottom: 2rem; }
+
+  .field { display: flex; flex-direction: column; margin-bottom: 1.1rem; }
+  .field label {
+    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--color-text); margin-bottom: 6px;
+  }
+  .input-icon-wrap { position: relative; }
+  .input-icon-wrap .iico {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    color: var(--color-text-3); font-size: 0.8rem; pointer-events: none;
+  }
+  .input-icon-wrap input { padding-left: 38px !important; }
+  .input-icon-wrap .eye-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    color: var(--color-text-3); font-size: 0.8rem; padding: 2px; transition: color 0.15s;
+  }
+  .input-icon-wrap .eye-btn:hover { color: var(--color-primary); }
+
+  .forgot-link {
+    font-size: 0.78rem; color: var(--color-primary); font-weight: 600;
+    text-decoration: none; float: right; margin-top: -24px; margin-bottom: 10px; display: block;
+  }
+  .forgot-link:hover { color: var(--color-primary-hover); }
+
+  /* Remember me */
+  .remember-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem;
+  }
+  .remember-row input[type="checkbox"] {
+    width: 16px; height: 16px; cursor: pointer; accent-color: var(--color-primary);
+    border-radius: 4px;
+  }
+  .remember-row label { font-size: 0.82rem; color: var(--color-text-2); cursor: pointer; margin: 0; }
+
+  .submit-btn {
+    width: 100%; padding: 12px; border-radius: var(--radius-full);
+    background: var(--color-primary); color: #fff;
+    border: none; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(16,185,129,0.3);
+  }
+  .submit-btn:hover { background: var(--color-primary-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
+  .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    color: var(--color-text-3); font-size: 0.75rem; margin: 1.25rem 0;
+  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--color-border); }
+
+  .register-link { text-align: center; margin-top: 1.25rem; font-size: 0.82rem; color: var(--color-text-2); }
+  .register-link a { color: var(--color-primary); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .auth-panel-left { display: none; }
+    .auth-split { flex-direction: column; }
+    .auth-panel-right { min-height: calc(100vh - 60px); padding: 2rem 1rem; }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center py-5">
-    <div class="col-md-6 col-lg-4" data-aos="zoom-in">
-        <div class="card glass-card-premium shadow-2xl p-2">
-            <div class="card-header border-0 bg-transparent py-4 text-center">
-                <div class="login-icon mb-3">
-                    <i class="fas fa-lock-open fs-2 text-primary"></i>
-                </div>
-                <h2 class="auth-title">Welcome Back</h2>
-                <p class="text-muted small">Log in to your intelligent workspace</p>
-            </div>
-            
-            <div class="card-body px-4 pb-5">
-                <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold">Email Address</label>
-                        <div class="input-group-premium">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" class="form-control" name="email" placeholder="name@company.com" required>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between">
-                            <label class="form-label small fw-bold">Password</label>
-                            <a href="#" class="text-primary small text-decoration-none">Forgot?</a>
-                        </div>
-                        <div class="input-group-premium">
-                            <i class="fas fa-key"></i>
-                            <input type="password" class="form-control" name="password" placeholder="••••••••" required>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold mt-2">
-                        <span>Log In</span>
-                        <i class="fas fa-sign-in-alt ms-2"></i>
-                    </button>
-                </form>
-                
-                <div class="auth-footer text-center mt-4 pt-3 border-top border-light">
-                    <p class="text-muted small mb-0">Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-primary fw-bold text-decoration-none">Create one</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="auth-split" style="margin: 0 -1.5rem;">
 
-<style>
-.auth-title { font-weight: 800; font-family: 'Outfit', sans-serif; letter-spacing: -0.5px; }
-.input-group-premium {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-.input-group-premium i {
-    position: absolute;
-    left: 1.2rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    pointer-events: none;
-}
-.input-group-premium .form-control {
-    padding-left: 3rem !important;
-    background: rgba(255,255,255,0.6);
-}
-.glass-card-premium {
-    background: rgba(255,255,255,0.8) !important;
-    backdrop-filter: blur(25px);
-    border: 1px solid var(--glass-border) !important;
-}
-.login-icon {
-    width: 60px;
-    height: 60px;
-    background: var(--primary-glow);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-}
-/* Dark Mode Fallbacks */
-body.dark-mode .glass-card-premium { background: var(--glass-bg) !important; }
-body.dark-mode .input-group-premium .form-control { background: rgba(30, 41, 59, 0.5) !important; color: #fff !important; }
-</style>
+  <!-- ===== Left panel ===== -->
+  <div class="auth-panel-left">
+    <div class="left-logo">
+      <div class="left-logo-icon"><i class="fas fa-brain"></i></div>
+      <span class="left-logo-name">Hire AI</span>
+    </div>
+
+    <div class="left-content">
+      <h2 class="left-headline">Welcome back to<br><span>smarter hiring.</span></h2>
+      <p class="left-desc">Your AI-powered recruitment campaigns are waiting. Pick up right where you left off.</p>
+
+      <!-- Testimonial -->
+      <div class="testimonial-card">
+        <p class="testimonial-text">"Hire AI cut our time-to-hire from 6 weeks to under 5 days. The quality of candidates is consistently outstanding."</p>
+        <div class="testimonial-author">
+          <div class="tauthor-avatar">RK</div>
+          <div>
+            <div class="tauthor-name">Rahul Kapoor</div>
+            <div class="tauthor-title">VP Engineering, NovaTech</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">
+      &copy; 2026 Hire AI, Inc. &bull;
+      <a href="#">Privacy</a> &bull;
+      <a href="#">Terms</a>
+    </div>
+  </div>
+
+  <!-- ===== Right panel: Form ===== -->
+  <div class="auth-panel-right">
+    <div class="login-form-wrap" data-aos="fade-up">
+
+      <h1>Log in to Hire AI</h1>
+      <p class="sub">Enter your credentials to access your workspace.</p>
+
+      <form method="POST" action="{{ url_for('auth.login') }}" id="login-form" novalidate>
+
+        <div class="field">
+          <label for="l-email">Email Address</label>
+          <div class="input-icon-wrap">
+            <i class="fas fa-envelope iico"></i>
+            <input type="email" class="form-control" id="l-email" name="email"
+              value="{{ form_email or '' }}"
+              placeholder="you@company.com" required autocomplete="email">
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="field">
+          <label for="l-password">Password</label>
+          <div class="input-icon-wrap">
+            <i class="fas fa-lock iico"></i>
+            <input type="password" class="form-control" id="l-password" name="password"
+              placeholder="Enter your password" required autocomplete="current-password"
+              style="padding-right:40px!important;">
+            <button type="button" class="eye-btn" id="toggle-pwd" tabindex="-1" aria-label="Toggle password">
+              <i class="fas fa-eye-slash"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <a href="#" class="forgot-link">Forgot password?</a>
+
+        <div class="remember-row">
+          <input type="checkbox" id="remember" name="remember" value="1">
+          <label for="remember">Keep me signed in for 30 days</label>
+        </div>
+
+        <button type="submit" class="submit-btn" id="login-submit-btn">
+          <i class="fas fa-sign-in-alt"></i> Log In
+        </button>
+
+        <div class="divider">or</div>
+
+        <a href="{{ url_for('auth.register') }}" class="submit-btn" style="background:var(--color-surface);color:var(--color-text)!important;box-shadow:var(--shadow-sm);border:1px solid var(--color-border);text-decoration:none;">
+          <i class="fas fa-user-plus" style="color:var(--color-primary);"></i> Create a new account
+        </a>
+
+      </form>
+
+      <div class="register-link" style="margin-top:1.5rem;">
+        <span>Don't have an account? </span>
+        <a href="{{ url_for('auth.register') }}">Sign up free</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Toggle password visibility
+document.getElementById('toggle-pwd').addEventListener('click', function() {
+  const inp  = document.getElementById('l-password');
+  const icon = this.querySelector('i');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  icon.className = inp.type === 'text' ? 'fas fa-eye' : 'fas fa-eye-slash';
+});
+
+// Form validation
+document.getElementById('login-form').addEventListener('submit', function(e) {
+  let ok = true;
+
+  const email = document.getElementById('l-email');
+  const pwd   = document.getElementById('l-password');
+
+  if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    email.classList.add('is-invalid');
+    email.closest('.field').querySelector('.invalid-feedback').textContent = 'Please enter a valid email address.';
+    ok = false;
+  } else { email.classList.remove('is-invalid'); }
+
+  if (!pwd.value.trim()) {
+    pwd.classList.add('is-invalid');
+    pwd.closest('.field').querySelector('.invalid-feedback').textContent = 'Password is required.';
+    ok = false;
+  } else { pwd.classList.remove('is-invalid'); }
+
+  if (!ok) { e.preventDefault(); return; }
+
+  const btn = document.getElementById('login-submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+});
+</script>
 {% endblock %}

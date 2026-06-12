@@ -1,275 +1,155 @@
 {% extends "layouts/base.html" %}
-
-{% block title %}Admin Control Panel - Hire AI{% endblock %}
+{% block title %}Admin Panel — Hire AI{% endblock %}
 
 {% block content %}
-<div class="admin-header mb-5" data-aos="fade-down">
-    <div class="d-flex align-items-center gap-3">
-        <div class="admin-badge">
-            <i class="fas fa-shield-halved fs-3 text-primary"></i>
-        </div>
-        <div>
-            <h1 class="fw-800 mb-0">System Control Center</h1>
-            <p class="text-muted mb-0">Manage system-wide data and monitor MongoDB collections</p>
-        </div>
-    </div>
-</div>
+<div class="py-4">
 
-<div class="row g-4 mb-5">
+  <!-- Page header -->
+  <div class="d-flex align-items-center gap-3 mb-5" data-aos="fade-down">
+    <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:var(--color-primary-bg);border:1.5px solid var(--emerald-100);display:flex;align-items:center;justify-content:center;color:var(--color-primary);font-size:1.1rem;">
+      <i class="fas fa-shield-halved"></i>
+    </div>
+    <div>
+      <h1 style="font-size:1.4rem;font-weight:800;margin-bottom:2px;">System Control Center</h1>
+      <p style="font-size:0.82rem;color:var(--color-text-2);margin:0;">Monitor and manage all MongoDB collections</p>
+    </div>
+    <span class="badge badge-emerald ms-auto" style="padding:6px 14px;font-size:0.78rem;">
+      <i class="fas fa-circle" style="font-size:0.5rem;color:var(--color-primary);"></i> Admin Access
+    </span>
+  </div>
+
+  <!-- Stats row -->
+  <div class="row g-3 mb-5" data-aos="fade-up">
     {% for name, data in collections.items() %}
-    <div class="col-md-3" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 100 }}">
-        <div class="card stat-card-minimal">
-            <div class="stat-icon-small">
-                <i class="fas fa-database text-primary"></i>
-            </div>
-            <div class="stat-content">
-                <div class="stat-label-small">{{ name|title }}</div>
-                <div class="stat-value-small">{{ data|length }}</div>
-            </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+          <span class="stat-label">{{ name|title }}</span>
+          <div style="width:28px;height:28px;border-radius:var(--radius-sm);background:var(--color-primary-bg);display:flex;align-items:center;justify-content:center;color:var(--color-primary);font-size:0.7rem;">
+            <i class="fas fa-database"></i>
+          </div>
         </div>
+        <div class="stat-value">{{ data|length }}</div>
+        <div class="stat-label mt-1">records</div>
+      </div>
     </div>
     {% endfor %}
-</div>
+  </div>
 
-<div class="card border-0 shadow-2xl overflow-hidden mb-5" data-aos="fade-up">
-    <div class="card-header border-0 bg-transparent p-0">
-        <ul class="nav admin-tabs" id="adminTab" role="tablist">
-            {% for name in collections.keys() %}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link admin-tab-btn {% if loop.first %}active{% endif %}" id="{{ name }}-tab" data-bs-toggle="tab" data-bs-target="#{{ name }}" type="button" role="tab">
-                    <i class="fas fa-folder-open me-2"></i>{{ name|title }}
-                </button>
-            </li>
-            {% endfor %}
-        </ul>
+  <!-- Tab panel -->
+  <div class="card" data-aos="fade-up" data-aos-delay="100">
+
+    <!-- Tabs -->
+    <div style="border-bottom:1px solid var(--color-border);padding:0 1.5rem;background:var(--color-surface-2);">
+      <ul class="nav" id="adminTab" role="tablist" style="gap:0;border:none;">
+        {% for name in collections.keys() %}
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link {% if loop.first %}active{% endif %}"
+            id="{{ name }}-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-{{ name }}"
+            type="button" role="tab"
+            style="border:none;border-bottom:2px solid transparent;border-radius:0;padding:1rem 1.25rem;font-size:0.82rem;font-weight:600;color:var(--color-text-2);background:none;transition:var(--transition);{% if loop.first %}border-bottom-color:var(--color-primary);color:var(--color-primary);{% endif %}"
+            onmouseenter="if(!this.classList.contains('active'))this.style.color='var(--color-text)'"
+            onmouseleave="if(!this.classList.contains('active'))this.style.color='var(--color-text-2)'"
+          >
+            <i class="fas fa-table me-2" style="font-size:0.65rem;opacity:0.7;"></i>{{ name|title }}
+          </button>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
-    <div class="card-body p-0">
-        <div class="tab-content" id="adminTabContent">
-            {% for name, data in collections.items() %}
-            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="{{ name }}" role="tabpanel">
-                <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-light bg-opacity-25">
-                    <h5 class="fw-bold mb-0 text-dark">
-                        <i class="fas fa-table-list text-primary me-2"></i> {{ name|title }} Explorer
-                    </h5>
-                    <div class="search-box-admin">
-                        <i class="fas fa-search me-2"></i>
-                        <input type="text" class="table-search" placeholder="Search records..." onkeyup="filterTable(this, '{{ name }}-table')">
-                    </div>
-                </div>
-                
-                <div class="table-container p-0">
-                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
-                        {% if data %}
-                        <table class="table premium-table mb-0" id="{{ name }}-table">
-                            <thead>
-                                <tr>
-                                    {% for key in data[0].keys() %}
-                                    <th>{{ key }}</th>
-                                    {% endfor %}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for record in data %}
-                                <tr>
-                                    {% for key, value in record.items() %}
-                                    <td>
-                                        {% if value is sameas true %}
-                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success border-opacity-25">True</span>
-                                        {% elif value is sameas false %}
-                                            <span class="badge rounded-pill bg-danger-subtle text-danger border border-danger border-opacity-25">False</span>
-                                        {% elif '@' in value|string and '.' in value|string %}
-                                            <a href="mailto:{{ value }}" class="text-primary text-decoration-none fw-600">{{ value }}</a>
-                                        {% elif value|string|length > 100 %}
-                                            <div class="text-truncate-cell" title="{{ value }}">{{ value }}</div>
-                                        {% else %}
-                                            {{ value }}
-                                        {% endif %}
-                                    </td>
-                                    {% endfor %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% else %}
-                        <div class="text-center py-5">
-                            <div class="empty-state">
-                                <i class="fas fa-ghost fs-1 text-muted mb-3"></i>
-                                <p class="text-muted">No records found in this collection.</p>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+
+    <!-- Tab content -->
+    <div class="tab-content" id="adminTabContent">
+      {% for name, data in collections.items() %}
+      <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="tab-{{ name }}" role="tabpanel">
+
+        <!-- Table toolbar -->
+        <div style="padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--color-border);">
+          <div>
+            <span style="font-size:0.875rem;font-weight:600;color:var(--color-text);">{{ name|title }}</span>
+            <span class="badge badge-slate ms-2">{{ data|length }} records</span>
+          </div>
+          <!-- Search -->
+          <div style="display:flex;align-items:center;gap:8px;background:var(--color-surface-2);border:1.5px solid var(--color-border);border-radius:var(--radius-full);padding:6px 14px;width:260px;transition:border-color 0.2s,box-shadow 0.2s;"
+               onfocusin="this.style.borderColor='var(--color-primary)';this.style.boxShadow='0 0 0 3px var(--color-primary-glow)'"
+               onfocusout="this.style.borderColor='var(--color-border)';this.style.boxShadow='none'">
+            <i class="fas fa-search" style="color:var(--color-text-3);font-size:0.75rem;flex-shrink:0;"></i>
+            <input type="text" placeholder="Search records..."
+              onkeyup="filterTable(this, '{{ name }}-table')"
+              style="border:none;outline:none;background:transparent;font-size:0.82rem;color:var(--color-text);width:100%;font-family:inherit;">
+          </div>
         </div>
+
+        <!-- Table -->
+        <div style="overflow-x:auto;overflow-y:auto;max-height:480px;">
+          {% if data %}
+          <table class="data-table" id="{{ name }}-table">
+            <thead>
+              <tr>
+                {% for key in data[0].keys() %}<th>{{ key }}</th>{% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in data %}
+              <tr>
+                {% for key, value in record.items() %}
+                <td>
+                  {% if value is sameas true %}
+                    <span class="badge badge-emerald"><i class="fas fa-check" style="font-size:0.6rem;"></i> True</span>
+                  {% elif value is sameas false %}
+                    <span class="badge badge-danger"><i class="fas fa-xmark" style="font-size:0.6rem;"></i> False</span>
+                  {% elif '@' in value|string and '.' in value|string %}
+                    <a href="mailto:{{ value }}" style="color:var(--color-primary);font-weight:500;font-size:0.875rem;">{{ value }}</a>
+                  {% elif value|string|length > 100 %}
+                    <div style="max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:0.875rem;" title="{{ value }}">{{ value }}</div>
+                  {% else %}
+                    <span style="font-size:0.875rem;">{{ value }}</span>
+                  {% endif %}
+                </td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="table-empty">
+            <i class="fas fa-inbox"></i>
+            <p style="margin:0;font-size:0.875rem;">No records in this collection.</p>
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+      {% endfor %}
     </div>
+  </div>
+
 </div>
-
-<style>
-.admin-badge {
-    width: 60px;
-    height: 60px;
-    background: var(--primary-glow);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--glass-border);
-}
-.stat-card-minimal {
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    background: var(--bg-white);
-    border: 1px solid var(--glass-border);
-    transition: var(--transition);
-}
-.stat-card-minimal:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary);
-}
-.stat-icon-small {
-    width: 45px;
-    height: 45px;
-    background: var(--bg-light);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.stat-label-small {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-}
-.stat-value-small {
-    font-size: 1.5rem;
-    font-weight: 800;
-}
-.admin-tabs {
-    background: var(--bg-light);
-    border-bottom: 1px solid var(--glass-border);
-    padding: 0 1rem;
-}
-.admin-tab-btn {
-    border: none !important;
-    background: transparent !important;
-    color: var(--text-muted) !important;
-    padding: 1.25rem 1.5rem !important;
-    font-weight: 600;
-    position: relative;
-    transition: var(--transition);
-}
-.admin-tab-btn.active {
-    color: var(--primary) !important;
-}
-.admin-tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 1.5rem;
-    right: 1.5rem;
-    height: 3px;
-    background: var(--primary);
-    border-radius: 10px 10px 0 0;
-}
-.premium-table {
-    font-size: 0.9rem;
-}
-.premium-table thead th {
-    background: #fff;
-    border-bottom: 2px solid var(--glass-border);
-    padding: 1.25rem 1rem;
-    color: var(--text-muted);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-.premium-table tbody td {
-    padding: 1rem;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f5f9;
-}
-.text-truncate-cell {
-    max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.search-box-admin {
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border: 1px solid var(--glass-border);
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
-    width: 300px;
-    transition: var(--transition);
-}
-.search-box-admin:focus-within {
-    border-color: var(--primary);
-    box-shadow: 0 0 10px var(--primary-glow);
-}
-.table-search {
-    border: none;
-    outline: none;
-    font-size: 0.85rem;
-    width: 100%;
-    background: transparent;
-    color: inherit;
-}
-.fw-600 { font-weight: 600; }
-
-body.dark-mode .stat-card-minimal, body.dark-mode .admin-tabs {
-    background: var(--bg-white);
-    color: var(--text-main);
-}
-body.dark-mode .stat-value-small {
-    color: var(--text-main);
-}
-body.dark-mode .stat-icon-small {
-    background: var(--bg-light);
-}
-body.dark-mode .premium-table thead th {
-    background: var(--bg-white);
-    border-bottom: 2px solid var(--glass-border);
-    color: var(--primary);
-}
-body.dark-mode .premium-table tbody td {
-    border-bottom: 1px solid var(--glass-border);
-}
-body.dark-mode .search-box-admin {
-    background: rgba(30, 41, 59, 0.5);
-    color: var(--text-main);
-}
-</style>
 
 <script>
 function filterTable(input, tableId) {
-    let filter = input.value.toUpperCase();
-    let table = document.getElementById(tableId);
-    let tr = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < tr.length; i++) {
-        let visible = false;
-        let td = tr[i].getElementsByTagName("td");
-        for (let j = 0; j < td.length; j++) {
-            if (td[j]) {
-                if (td[j].textContent.toUpperCase().indexOf(filter) > -1) {
-                    visible = true;
-                    break;
-                }
-            }
-        }
-        tr[i].style.display = visible ? "" : "none";
-    }
+  const filter = input.value.toUpperCase();
+  const table  = document.getElementById(tableId);
+  if (!table) return;
+  Array.from(table.getElementsByTagName('tr')).slice(1).forEach(row => {
+    const text = Array.from(row.getElementsByTagName('td')).map(td => td.textContent).join(' ');
+    row.style.display = text.toUpperCase().includes(filter) ? '' : 'none';
+  });
 }
+
+// Style active tab
+document.querySelectorAll('#adminTab button').forEach(btn => {
+  btn.addEventListener('shown.bs.tab', function() {
+    document.querySelectorAll('#adminTab button').forEach(b => {
+      b.style.borderBottomColor = 'transparent';
+      b.style.color = 'var(--color-text-2)';
+    });
+    this.style.borderBottomColor = 'var(--color-primary)';
+    this.style.color = 'var(--color-primary)';
+  });
+});
 </script>
 {% endblock %}

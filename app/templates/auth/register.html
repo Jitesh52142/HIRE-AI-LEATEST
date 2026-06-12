@@ -1,93 +1,463 @@
 {% extends "layouts/base.html" %}
+{% block title %}Create Account — Hire AI{% endblock %}
 
-{% block title %}Register - Hire AI{% endblock %}
+{% block styles %}
+<style>
+  .auth-split {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: stretch;
+  }
+
+  /* Left panel */
+  .auth-panel-left {
+    width: 420px;
+    min-width: 420px;
+    background: linear-gradient(160deg, #0a1628 0%, #0f2a1e 60%, #0b1f14 100%);
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .auth-panel-left::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 20%, rgba(16,185,129,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(52,211,153,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .left-logo { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
+  .left-logo-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #10b981, #047857);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1rem;
+    box-shadow: 0 4px 14px rgba(16,185,129,0.4);
+  }
+  .left-logo-name { font-family: 'Outfit',sans-serif; font-size: 1.3rem; font-weight: 800; color: #fff; }
+
+  .left-content { position: relative; z-index: 1; }
+  .left-headline {
+    font-family: 'Outfit',sans-serif;
+    font-size: 1.75rem; font-weight: 800; color: #fff;
+    line-height: 1.2; letter-spacing: -0.03em; margin-bottom: 1rem;
+  }
+  .left-headline span {
+    background: linear-gradient(135deg, #34d399, #10b981);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .left-desc { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.65; margin-bottom: 2rem; }
+
+  .feature-list { display: flex; flex-direction: column; gap: 14px; }
+  .feature-item { display: flex; align-items: flex-start; gap: 12px; }
+  .feature-icon {
+    width: 32px; height: 32px; min-width: 32px; border-radius: 8px;
+    background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: #10b981; font-size: 0.75rem;
+  }
+  .feature-text-title { font-size: 0.82rem; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 1px; }
+  .feature-text-desc  { font-size: 0.75rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+  .left-footer { font-size: 0.75rem; color: rgba(255,255,255,0.3); position: relative; z-index: 1; }
+  .left-footer a { color: rgba(255,255,255,0.45); }
+
+  /* Right panel */
+  .auth-panel-right {
+    flex: 1;
+    background: var(--color-bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 3rem 2rem;
+    overflow-y: auto;
+  }
+
+  .register-form-wrap { width: 100%; max-width: 520px; }
+
+  .register-form-wrap h1 {
+    font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em;
+    color: var(--color-text); margin-bottom: 4px;
+  }
+  .register-form-wrap .sub { font-size: 0.875rem; color: var(--color-text-2); margin-bottom: 2rem; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .field { display: flex; flex-direction: column; margin-bottom: 1.1rem; }
+  .field label {
+    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--color-text); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .field label .req { color: var(--color-danger); font-size: 0.7rem; }
+  .field label .opt { font-size: 0.68rem; color: var(--color-text-3); font-weight: 500; text-transform: none; letter-spacing: 0; }
+
+  .input-icon-wrap { position: relative; }
+  .input-icon-wrap .iico {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    color: var(--color-text-3); font-size: 0.8rem; pointer-events: none;
+  }
+  .input-icon-wrap input,
+  .input-icon-wrap select { padding-left: 38px !important; }
+  .input-icon-wrap .eye-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    color: var(--color-text-3); font-size: 0.8rem; padding: 2px; transition: color 0.15s;
+  }
+  .input-icon-wrap .eye-btn:hover { color: var(--color-primary); }
+
+  .field .form-control, .field .form-select {
+    border-radius: 9px; font-size: 0.88rem;
+  }
+
+  /* Strength */
+  .strength-bar { height: 3px; background: var(--color-border); border-radius: 99px; margin-top: 7px; overflow: hidden; }
+  .strength-fill { height: 100%; border-radius: 99px; transition: width .3s, background .3s; width: 0; }
+  .pw-rules { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 8px; }
+  .pw-rule { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--color-text-3); }
+  .pw-rule i { font-size: 0.6rem; }
+  .pw-rule.met { color: var(--color-primary); }
+
+  /* Divider */
+  .form-section-label {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--color-text-3);
+    display: flex; align-items: center; gap: 10px; margin: 1.25rem 0 1rem;
+  }
+  .form-section-label::before, .form-section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--color-border);
+  }
+
+  .submit-btn {
+    width: 100%; padding: 12px; border-radius: var(--radius-full);
+    background: var(--color-primary); color: #fff;
+    border: none; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(16,185,129,0.3);
+    margin-top: 0.5rem;
+  }
+  .submit-btn:hover { background: var(--color-primary-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
+  .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+  .login-link { text-align: center; margin-top: 1.25rem; font-size: 0.82rem; color: var(--color-text-2); }
+  .login-link a { color: var(--color-primary); font-weight: 600; }
+
+  .terms-text { font-size: 0.73rem; color: var(--color-text-3); text-align: center; margin-top: 1rem; line-height: 1.5; }
+  .terms-text a { color: var(--color-primary); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .auth-panel-left { display: none; }
+    .auth-split { flex-direction: column; }
+    .auth-panel-right { padding: 2rem 1rem; min-height: calc(100vh - 60px); }
+    .form-row { grid-template-columns: 1fr; }
+    .pw-rules { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center py-5">
-    <div class="col-md-6 col-lg-4" data-aos="zoom-in">
-        <div class="card glass-card-premium shadow-2xl p-2">
-            <div class="card-header border-0 bg-transparent py-4 text-center">
-                <div class="register-icon mb-3">
-                    <i class="fas fa-rocket fs-2 text-primary"></i>
-                </div>
-                <h2 class="auth-title">Get Started</h2>
-                <p class="text-muted small">Join 500+ top recruitment agencies</p>
-            </div>
-            
-            <div class="card-body px-4 pb-5">
-                <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold">Professional Email</label>
-                        <div class="input-group-premium">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" class="form-control" name="email" placeholder="name@company.com" required>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold">Secure Password</label>
-                        <div class="input-group-premium">
-                            <i class="fas fa-key"></i>
-                            <input type="password" class="form-control" name="password" placeholder="••••••••" required>
-                        </div>
-                        <div class="form-text mt-2" style="font-size: 0.7rem;">Minimum 8 characters with at least one number.</div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold mt-2">
-                        <span>Create AI Account</span>
-                        <i class="fas fa-arrow-right ms-2"></i>
-                    </button>
-                    
-                    <div class="auth-terms mt-4 text-center">
-                        <p class="text-muted xtra-small">By signing up, you agree to our <a href="#" class="text-decoration-none">Terms</a> & <a href="#" class="text-decoration-none">Privacy Policy</a>.</p>
-                    </div>
-                </form>
-                
-                <div class="auth-footer text-center mt-4 pt-3 border-top border-light">
-                    <p class="text-muted small mb-0">Already have an account? <a href="{{ url_for('auth.login') }}" class="text-primary fw-bold text-decoration-none">Login here</a></p>
-                </div>
-            </div>
-        </div>
+<div class="auth-split" style="margin: 0 -1.5rem;">
+
+  <!-- ===== Left panel ===== -->
+  <div class="auth-panel-left">
+    <div class="left-logo">
+      <div class="left-logo-icon"><i class="fas fa-brain"></i></div>
+      <span class="left-logo-name">Hire AI</span>
     </div>
+
+    <div class="left-content">
+      <h2 class="left-headline">Find the right talent,<br><span>in hours — not weeks.</span></h2>
+      <p class="left-desc">Hire AI uses machine learning to scan, score, and surface top-tier candidates matched to your company culture and technical needs.</p>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-brain"></i></div>
+          <div>
+            <div class="feature-text-title">Neural Matching Engine</div>
+            <div class="feature-text-desc">AI that understands context, culture fit, and technical depth beyond keywords.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-shield-heart"></i></div>
+          <div>
+            <div class="feature-text-title">Zero-Bias Scoring</div>
+            <div class="feature-text-desc">Engineered to eliminate unconscious bias from initial candidate screening.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+          <div>
+            <div class="feature-text-title">Real-time Insights</div>
+            <div class="feature-text-desc">Live data synced from LinkedIn, GitHub, Stack Overflow, and more.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-users"></i></div>
+          <div>
+            <div class="feature-text-title">500+ Teams Trust Us</div>
+            <div class="feature-text-desc">From early-stage startups to enterprise recruitment teams worldwide.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">
+      &copy; 2026 Hire AI, Inc. &bull;
+      <a href="#">Privacy</a> &bull;
+      <a href="#">Terms</a>
+    </div>
+  </div>
+
+  <!-- ===== Right panel: Form ===== -->
+  <div class="auth-panel-right">
+    <div class="register-form-wrap" data-aos="fade-up">
+
+      <h1>Create your account</h1>
+      <p class="sub">Free to start. No credit card required.</p>
+
+      <form method="POST" action="{{ url_for('auth.register') }}" id="register-form" novalidate>
+
+        <!-- Personal info -->
+        <div class="form-section-label">Personal Information</div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="r-fullname">Full Name <span class="req">*</span></label>
+            <div class="input-icon-wrap">
+              <i class="fas fa-user iico"></i>
+              <input type="text" class="form-control" id="r-fullname" name="full_name"
+                value="{{ form_data.get('full_name','') }}"
+                placeholder="Jane Smith" required minlength="2" autocomplete="name">
+            </div>
+            <div class="invalid-feedback"></div>
+          </div>
+
+          <div class="field">
+            <label for="r-jobtitle">Job Title <span class="req">*</span></label>
+            <div class="input-icon-wrap">
+              <i class="fas fa-briefcase iico"></i>
+              <input type="text" class="form-control" id="r-jobtitle" name="job_title"
+                value="{{ form_data.get('job_title','') }}"
+                placeholder="Head of Talent" required autocomplete="organization-title">
+            </div>
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+
+        <!-- Company -->
+        <div class="form-section-label">Company Details</div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="r-company">Company Name <span class="req">*</span></label>
+            <div class="input-icon-wrap">
+              <i class="fas fa-building iico"></i>
+              <input type="text" class="form-control" id="r-company" name="company_name"
+                value="{{ form_data.get('company_name','') }}"
+                placeholder="Acme Corp" required minlength="2" autocomplete="organization">
+            </div>
+            <div class="invalid-feedback"></div>
+          </div>
+
+          <div class="field">
+            <label for="r-phone">Phone <span class="opt">(optional)</span></label>
+            <div class="input-icon-wrap">
+              <i class="fas fa-phone iico"></i>
+              <input type="tel" class="form-control" id="r-phone" name="phone"
+                value="{{ form_data.get('phone','') }}"
+                placeholder="+91 98765 43210" autocomplete="tel">
+            </div>
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+
+        <!-- Account credentials -->
+        <div class="form-section-label">Account Credentials</div>
+
+        <div class="field">
+          <label for="r-email">Work Email <span class="req">*</span></label>
+          <div class="input-icon-wrap">
+            <i class="fas fa-envelope iico"></i>
+            <input type="email" class="form-control" id="r-email" name="email"
+              value="{{ form_data.get('email','') }}"
+              placeholder="jane@company.com" required autocomplete="email">
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="r-password">Password <span class="req">*</span></label>
+            <div class="input-icon-wrap">
+              <i class="fas fa-lock iico"></i>
+              <input type="password" class="form-control" id="r-password" name="password"
+                placeholder="Create a strong password" required autocomplete="new-password"
+                style="padding-right:40px!important;">
+              <button type="button" class="eye-btn" id="toggle-pwd" tabindex="-1" aria-label="Toggle">
+                <i class="fas fa-eye-slash"></i>
+              </button>
+            </div>
+            <div class="invalid-feedback"></div>
+            <div class="strength-bar mt-1"><div class="strength-fill" id="strength-fill"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;">
+              <span style="font-size:0.7rem;color:var(--color-text-3);">Strength</span>
+              <span style="font-size:0.7rem;font-weight:600;" id="strength-text"></span>
+            </div>
+            <div class="pw-rules mt-1">
+              <div class="pw-rule" id="rule-length"><i class="far fa-circle"></i> 8+ characters</div>
+              <div class="pw-rule" id="rule-number"><i class="far fa-circle"></i> One number</div>
+              <div class="pw-rule" id="rule-upper"><i class="far fa-circle"></i> Uppercase letter</div>
+              <div class="pw-rule" id="rule-special"><i class="far fa-circle"></i> Special character</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="r-confirm">Confirm Password <span class="req">*</span></label>
+            <div class="input-icon-wrap">
+              <i class="fas fa-lock iico"></i>
+              <input type="password" class="form-control" id="r-confirm" name="confirm_password"
+                placeholder="Re-enter password" required autocomplete="new-password"
+                style="padding-right:40px!important;">
+              <button type="button" class="eye-btn" id="toggle-confirm" tabindex="-1" aria-label="Toggle">
+                <i class="fas fa-eye-slash"></i>
+              </button>
+            </div>
+            <div class="invalid-feedback"></div>
+            <div id="match-hint" style="font-size:0.72rem;margin-top:5px;display:none;"></div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">
+          <i class="fas fa-rocket"></i> Create Account — It's Free
+        </button>
+
+        <p class="terms-text">
+          By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+          We'll never share your data with third parties.
+        </p>
+      </form>
+
+      <div class="login-link">
+        Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a>
+      </div>
+    </div>
+  </div>
+
 </div>
+{% endblock %}
 
-<style>
-.auth-title { font-weight: 800; font-family: 'Outfit', sans-serif; letter-spacing: -0.5px; }
-.input-group-premium {
-    position: relative;
-    display: flex;
-    align-items: center;
+{% block scripts %}
+<script>
+// Password toggle
+function toggleVisibility(inputId, btnId) {
+  const inp  = document.getElementById(inputId);
+  const icon = document.getElementById(btnId).querySelector('i');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  icon.className = inp.type === 'text' ? 'fas fa-eye' : 'fas fa-eye-slash';
 }
-.input-group-premium i {
-    position: absolute;
-    left: 1.2rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    pointer-events: none;
-}
-.input-group-premium .form-control {
-    padding-left: 3rem !important;
-    background: rgba(255,255,255,0.6);
-}
-.glass-card-premium {
-    background: rgba(255,255,255,0.8) !important;
-    backdrop-filter: blur(25px);
-    border: 1px solid var(--glass-border) !important;
-}
-.register-icon {
-    width: 60px;
-    height: 60px;
-    background: var(--primary-glow);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-}
-.xtra-small { font-size: 0.75rem; }
+document.getElementById('toggle-pwd').onclick     = () => toggleVisibility('r-password', 'toggle-pwd');
+document.getElementById('toggle-confirm').onclick = () => toggleVisibility('r-confirm',  'toggle-confirm');
 
-/* Dark Mode Fallbacks */
-body.dark-mode .glass-card-premium { background: var(--glass-bg) !important; }
-body.dark-mode .input-group-premium .form-control { background: rgba(30, 41, 59, 0.5) !important; color: #fff !important; }
-</style>
+// Password strength
+const pwdInput     = document.getElementById('r-password');
+const strengthFill = document.getElementById('strength-fill');
+const strengthText = document.getElementById('strength-text');
+
+function checkRule(id, pass) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('met', pass);
+  el.querySelector('i').className = pass ? 'fas fa-check-circle' : 'far fa-circle';
+}
+
+pwdInput.addEventListener('input', function() {
+  const v = this.value;
+  const checks = {
+    length:  v.length >= 8,
+    number:  /\d/.test(v),
+    upper:   /[A-Z]/.test(v),
+    special: /[^A-Za-z0-9]/.test(v),
+  };
+  const score  = Object.values(checks).filter(Boolean).length;
+  const colors = ['', '#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
+  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+
+  checkRule('rule-length',  checks.length);
+  checkRule('rule-number',  checks.number);
+  checkRule('rule-upper',   checks.upper);
+  checkRule('rule-special', checks.special);
+
+  strengthFill.style.width      = (score * 25) + '%';
+  strengthFill.style.background = colors[score] || '';
+  strengthText.textContent      = labels[score] || '';
+  strengthText.style.color      = colors[score] || '';
+});
+
+// Confirm match hint
+document.getElementById('r-confirm').addEventListener('input', function() {
+  const hint = document.getElementById('match-hint');
+  if (!this.value) { hint.style.display = 'none'; return; }
+  const match = this.value === pwdInput.value;
+  hint.style.display = 'block';
+  hint.innerHTML = match
+    ? '<i class="fas fa-check-circle" style="color:#10b981;margin-right:4px;font-size:0.65rem;"></i><span style="color:#10b981;">Passwords match</span>'
+    : '<i class="fas fa-xmark-circle" style="color:#ef4444;margin-right:4px;font-size:0.65rem;"></i><span style="color:#ef4444;">Passwords do not match</span>';
+});
+
+// Submit validation
+document.getElementById('register-form').addEventListener('submit', function(e) {
+  let ok = true;
+  const fields = [
+    { id: 'r-fullname',  msg: 'Full name is required (min 2 chars).' },
+    { id: 'r-jobtitle',  msg: 'Job title is required.' },
+    { id: 'r-company',   msg: 'Company name is required.' },
+    { id: 'r-email',     msg: 'Please enter a valid work email.' },
+    { id: 'r-password',  msg: 'Password must be at least 8 characters.' },
+    { id: 'r-confirm',   msg: 'Please confirm your password.' },
+  ];
+
+  fields.forEach(({ id, msg }) => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.classList.add('is-invalid');
+      const fb = el.closest('.field')?.querySelector('.invalid-feedback');
+      if (fb) fb.textContent = msg;
+      ok = false;
+    } else {
+      el.classList.remove('is-invalid');
+    }
+  });
+
+  const pwd     = document.getElementById('r-password').value;
+  const confirm = document.getElementById('r-confirm').value;
+
+  if (pwd && !/\d/.test(pwd)) {
+    const el = document.getElementById('r-password');
+    el.classList.add('is-invalid');
+    el.closest('.field').querySelector('.invalid-feedback').textContent = 'Password must include at least one number.';
+    ok = false;
+  }
+
+  if (pwd && confirm && pwd !== confirm) {
+    const el = document.getElementById('r-confirm');
+    el.classList.add('is-invalid');
+    el.closest('.field').querySelector('.invalid-feedback').textContent = 'Passwords do not match.';
+    ok = false;
+  }
+
+  if (!ok) {
+    e.preventDefault();
+    this.querySelector('.is-invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+});
+</script>
 {% endblock %}
