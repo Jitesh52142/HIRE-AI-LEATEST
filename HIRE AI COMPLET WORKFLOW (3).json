@@ -1,0 +1,1974 @@
+{
+  "name": "HIRE AI COMPLET WORKFLOW",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/12xDq4BvuXsoRTUHcuuD_y9xHDNEaylS43bzehemy_wA/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "data1'",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12xDq4BvuXsoRTUHcuuD_y9xHDNEaylS43bzehemy_wA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "snippet",
+              "displayName": "snippet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "displayLink",
+              "displayName": "displayLink",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "image",
+              "displayName": "image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "person_firstName",
+              "displayName": "person_firstName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "person_lastName",
+              "displayName": "person_lastName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "person_jobTitle",
+              "displayName": "person_jobTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "organization",
+              "displayName": "organization",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -4192,
+        576
+      ],
+      "id": "14184caf-e8bc-43a8-9497-a9dfae341f37",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xrdosEs5Ytpv9Btt",
+          "name": "Google Sheets account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1ab6600a-794f-4e95-b95d-d9e0fbbabd2f",
+              "name": "description",
+              "value": "={{ $json.title }}{{ $json.link }}{{ $json.snippet }}{{ $json.displayLink }}{{ $json.person_firstName }}{{ $json.image }}{{ $json.person_firstName }}{{ $json.person_lastName }}{{ $json.person_jobTitle }}{{ $json.organization }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1248,
+        368
+      ],
+      "id": "95cf2cf1-c387-4cc3-9a48-0fa6df37bd57",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Google search agent. Use the following description to search for the person’s GitHub profile:\n\n{{ $json.description }}\n\nInstructions:\n\n1. Search using the description, including:\n   - Full name\n   - Organization / company\n   - Skills, technologies, or keywords mentioned\n   - LinkedIn, portfolio, or other public sources if available\n\n2. Only return the person’s **main GitHub profile** in the format: https://github.com/USERNAME. \n   - Do NOT return repository URLs, commit URLs, gist URLs, or any non-profile links.\n\n3. Validate each profile:\n   - Ensure the profile is publicly accessible (does NOT return 404)\n   - Ensure the profile matches the person’s description:\n     - Name on profile matches (or is very similar)\n     - The profile contains keywords, repositories, or descriptions that reflect the skills, technologies, or organization mentioned in the description\n   - If a profile is not working, removed, inaccessible, or does not match the description, skip it entirely.\n\n4. If multiple profiles exist, choose the one that best matches the description.\n\n5. If no valid profile is found, return nothing (do NOT guess or fabricate URLs).\n\n6. Output in the following format **only for verified profiles**:\n\nFull_Name | GitHub_Username | GitHub_URL\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1024,
+        272
+      ],
+      "id": "86b441b3-a447-4cc8-ae7e-d6f11df9af0b",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n\nYou are a web search agent. Use the following output to find the person’s publicly available email address:\n\n{{ $json.output }}\n\nInstructions:\n1. Search for publicly listed email addresses related to this person.  \n2. Output only valid and working email addresses.  \n3. Include the source where the email was found.  \n4. Do NOT include private or personal emails that are not publicly available.  \n5. Provide the output in the following format:\n\nFull_Name | Email_Address | Source_URL | GitHub_Username\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -672,
+        272
+      ],
+      "id": "9752c574-e587-463a-bfbf-c55835d7866a",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/12xDq4BvuXsoRTUHcuuD_y9xHDNEaylS43bzehemy_wA/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1831348468,
+          "mode": "list",
+          "cachedResultName": "github data ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12xDq4BvuXsoRTUHcuuD_y9xHDNEaylS43bzehemy_wA/edit#gid=1831348468"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "output"
+          ],
+          "schema": [
+            {
+              "id": "fullName",
+              "displayName": "fullName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "githubUrl",
+              "displayName": "githubUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "profile_name",
+              "displayName": "profile_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        256,
+        368
+      ],
+      "id": "27ef5091-fd53-4f4b-88bd-154b39f38fe2",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xrdosEs5Ytpv9Btt",
+          "name": "Google Sheets account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all input data from the previous node\nconst inputData = $input.all().map(item => item.json.output).flat();\n\n// Ensure inputData is an array\nconst dataArray = Array.isArray(inputData) ? inputData : [inputData];\n\n// Function to split data into columns and skip empty rows\nconst splitData = (arr) => {\n  return arr\n    .map(item => {\n      // Skip empty or header lines\n      if (!item || item.includes(\"Full_Name\") || item.includes(\"[empty]\")) return null;\n\n      // Split by '|' and trim spaces\n      const parts = item.split(\"|\").map(p => p.trim());\n\n      // Skip row if email or GitHub URL is missing\n      if (!parts[1] || !parts[2]) return null;\n\n      return {\n        fullName: parts[0] || \"\",\n        email: parts[1] || \"\",\n        githubUrl: parts[2] || \"\",\n        profile_name: parts[3] || \"\" // e.g., \"github url\"\n      };\n    })\n    .filter(Boolean); // Remove null entries\n};\n\n// Run the function\nconst result = splitData(dataArray);\n\n// Return all items in n8n compatible format\nreturn result.map(r => ({ json: r }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        368
+      ],
+      "id": "7949b45a-0493-4c4c-b8a4-c96e1f7a5684",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "48edfceb-6f2e-45f6-8147-6e49064f7626",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -5888,
+        416
+      ],
+      "id": "950cb076-7784-4b5b-96b4-de674debd19e",
+      "name": "Webhook",
+      "webhookId": "48edfceb-6f2e-45f6-8147-6e49064f7626"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node (JavaScript)\n\n// Get the input JSON (from previous node / webhook)\nconst input = items[0].json;\n\n// Extract fields from body\nconst body = input.body;\n\n// 🔹 Helper function: Always return a clean comma-separated string\nfunction normalizeToString(value) {\n  if (Array.isArray(value)) {\n    return value.join(\", \");\n  } else if (typeof value === \"string\") {\n    // Handle comma or semicolon separated input gracefully\n    return value.split(/[,;]+/).map(s => s.trim()).join(\", \");\n  } else if (value == null) {\n    return \"\";\n  } else {\n    return String(value);\n  }\n}\n\n// Flatten data into structured key-value pairs\nreturn [\n  {\n    json: {\n      // Company Details\n      CompanyName: body.CompanyName,\n      CompanyWebsite: body.CompanyWebsite,\n      CompanyAddress: body.CompanyAddress,\n      CompanyIndustry: body.CompanyIndustry,\n      CompanyDescriptionAndMission: body.CompanyDescriptionAndMission,\n      CompanyCultureAndValues: body.CompanyCultureAndValues,\n\n      // HR Details\n      fullName: body.fullName,\n      hrTitle: body.hrTitle,\n      hrEmail: body.hrEmail,\n      hrPhone: body.hrPhone,\n      hrLinkedIn: body.hrLinkedIn,\n      preferredTimezone: body.preferredTimezone,\n\n      // Job / Role Details\n      PositionTitle: body.PositionTitle,\n      Department: body.Department,\n      JobType: body.JobType,\n      WorkMode: body.WorkMode,\n      Location: body.Location,\n      ExperienceRequired: body.ExperienceRequired,\n      ExpectedStartDate: body.ExpectedStartDate,\n      HiringUrgency: body.HiringUrgency,\n      Currency: body.Currency,\n      MinimumSalary: body.MinimumSalary,\n      MaximumSalary: body.MaximumSalary,\n      EducationRequirements: body.EducationRequirements,\n\n      // Skills & Responsibilities (safe normalization ✅)\n      RequiredSkillsAndExperience: normalizeToString(body.RequiredSkillsAndExperience),\n      KeyResponsibilities: normalizeToString(body.KeyResponsibilities),\n      NiceToHaveSkills: normalizeToString(body.NiceToHaveSkills),\n      BenefitsAndPerks: normalizeToString(body.BenefitsAndPerks),\n\n      // Interview Process\n      InterviewProcess: body.InterviewProcess\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5664,
+        416
+      ],
+      "id": "50069ee6-60d6-4234-9bca-2604c79538b6",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Job Description to LinkedIn Search Query converter.  \nYour task is to read ALL fields from the given JSON and generate a fully optimized LinkedIn profile search query.  \n\nInput JSON (fields may vary):  \n{{ $json.PositionTitle }} {{ $json.ExperienceRequired }} {{ $json.Location }} {{ $json.RequiredSkillsAndExperience }} {{ $json.NiceToHaveSkills }} {{ $json.EducationRequirements }}  \n\n### Rules:\n\n1️⃣ Base:\nAlways begin the query with:\nsite:linkedin.com/in\n\n2️⃣ Job Titles:\n- Extract all job titles from PositionTitle.  \n- Add variants/abbreviations if possible (e.g., \"ML Engineer\" for \"Machine Learning Engineer\").  \n- Put each title in quotes.  \n- Join multiple titles with OR.\n\n3️⃣ Experience:\n- If ExperienceRequired is provided, include it at the end of the query.  \n- Example: \"2 years experience\" → 2 years\n\n4️⃣ Skills & Tools:\n- Extract ALL skills, tools, and technologies explicitly mentioned in RequiredSkillsAndExperience and NiceToHaveSkills.  \n- Do NOT add assumptions.  \n- List them as plain keywords separated by spaces.\n\n5️⃣ Location:\n- If Location exists, include it at the end of the query.  \n- If multiple, include all.\n\n6️⃣ Education:\n- If EducationRequirements exists, include it as keywords at the end.  \n- Example: \"Bachelor's in Computer Science\" → Bachelor's Computer Science\n\n7️⃣ Formatting:\n- Do not lose or skip any data.  \n- If a field is empty, ignore it gracefully.  \n- Do not add extra punctuation, explanations, or JSON.  \n- Only output the final query string.  \n\n### Output Format:\nsite:linkedin.com/in [Job Titles with OR] [Skills] [Education] [Experience] [Location]\n\n---\n\n### Example Input JSON:\nPositionTitle: Machine Learning Engineer  \nExperienceRequired: 2+ years  \nLocation: Bangalore  \nRequiredSkillsAndExperience: Python, TensorFlow, PyTorch, SQL  \nNiceToHaveSkills: AWS, Docker  \nEducationRequirements: Bachelor's in Computer Science  \n\n### Example Output Query:\nsite:linkedin.com/in \"Machine Learning Engineer\" \"ML Engineer\" Python TensorFlow PyTorch SQL AWS Docker Bachelor's Computer Science 2+ years Bangalore\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -5440,
+        576
+      ],
+      "id": "8a0010b4-27c8-4f5f-98cf-64fe54af66e5",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -5360,
+        800
+      ],
+      "id": "2a348f25-3262-4a22-9da0-e828d344998c",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "a4bcqQwEueptND0l",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/customsearch/v1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "specifyQuery": "json",
+        "jsonQuery": "={\n  \"cx\": \"a0ee03bdd7ebe41e4\",\n  \"q\": \"{{ $json.job_description }}\",\n  \"num\": \"10\",\n  \"start\": \"1\",\n  \"fields\": \"items(title,link,snippet,displayLink,pagemap(cse_image,organization,person)),searchInformation(totalResults,searchTime)\",\n  \"safe\": \"off\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4864,
+        576
+      ],
+      "id": "d9c62353-b637-4b89-bf55-e443b1b24253",
+      "name": "HTTP Request1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "7qQHwFRTMg3fF4Xz",
+          "name": "google search api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = [];\n\nfor (const item of $input.all()) {\n    const data = item.json;\n\n    if (data.items) {\n        data.items.forEach(result => {\n            const flatItem = {};\n\n            // Top-level fields\n            flatItem.title = result.title || '';\n            flatItem.link = result.link || '';\n            flatItem.snippet = result.snippet || '';\n            flatItem.displayLink = result.displayLink || '';\n\n            // Image\n            flatItem.image = result.pagemap?.cse_image?.[0]?.src || '';\n\n            // Parse first and last name from title\n            if (flatItem.title.includes('-')) {\n                const parts = flatItem.title.split('-');\n                const namePart = parts[0].trim();\n                const jobPart = parts.slice(1).join('-').trim();\n\n                const nameParts = namePart.split(' ');\n                flatItem.person_firstName = nameParts[0] || '';\n                flatItem.person_lastName = nameParts.slice(1).join(' ') || '';\n                flatItem.person_jobTitle = jobPart || '';\n            } else {\n                flatItem.person_firstName = '';\n                flatItem.person_lastName = '';\n                flatItem.person_jobTitle = '';\n            }\n\n            // Extract organization from snippet (optional heuristic)\n            const orgMatch = flatItem.snippet.match(/at ([A-Za-z0-9\\s]+)/);\n            flatItem.organization = orgMatch ? orgMatch[1].trim() : '';\n\n            results.push({ json: flatItem });\n        });\n    }\n}\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4640,
+        576
+      ],
+      "id": "d11f5a37-78a3-4a90-b6bc-5fdcf1260175",
+      "name": "Code5"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      job_description: $input.first().json.output\n        ? $input.first().json.output.replace(/\"/g, '\\\\\"').replace(/\\r?\\n/g, \" \")\n        : \"\"\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5088,
+        576
+      ],
+      "id": "c60ac1dd-01d5-44e0-817c-db5e0d3c6447",
+      "name": "Code6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input: items from previous node\nconst seen = new Set();\nconst uniqueItems = [];\n\nfor (const item of items) {\n    // Normalize first name: trim and lowercase\n    const firstName = item.json.person_firstName.trim().toLowerCase();\n\n    if (!seen.has(firstName)) {\n        seen.add(firstName);\n        uniqueItems.push(item); // keep original item\n    }\n}\n\n// Return unique items\nreturn uniqueItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4416,
+        576
+      ],
+      "id": "3b569087-6e85-43fe-a391-e3dce24f48ad",
+      "name": "Code7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "08974cc9-cb91-46f0-8f93-f8bafa760e9f",
+              "name": "fullName",
+              "value": "={{ $json.fullName }}",
+              "type": "string"
+            },
+            {
+              "id": "99e52122-ce9e-48c1-a535-c6a898982565",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "a34f82cc-0aca-4180-98b8-f8dc62da780a",
+              "name": "githubUrl",
+              "value": "={{ $json.githubUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "1d1cdb55-da2e-45cf-91c4-63f45a84bdda",
+              "name": "profile_name",
+              "value": "={{ $json.profile_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -32,
+        368
+      ],
+      "id": "03129901-bb30-4cb6-8519-9aebd3075da6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c60257cf-d5fb-4253-8c1d-e801cfa71685",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "d70a0ad8-ab01-4f58-b13e-38bab6ec9488",
+              "name": "link",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "3a98a7e2-8cc9-4668-a20b-d01da6a4ff1e",
+              "name": "snippet",
+              "value": "={{ $json.snippet }}",
+              "type": "string"
+            },
+            {
+              "id": "7512b942-f543-4166-8569-afc54c4cff4c",
+              "name": "person_jobTitle",
+              "value": "={{ $json.person_jobTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "b9af1287-c0b0-4714-b0d5-4f35277adfcc",
+              "name": "organization",
+              "value": "={{ $json.organization }}",
+              "type": "string"
+            },
+            {
+              "id": "fb43ed4d-e64a-4908-8e69-92c741b416fd",
+              "name": "CompanyName",
+              "value": "={{ $('Code4').item.json.CompanyName }}",
+              "type": "string"
+            },
+            {
+              "id": "97498f28-ffc1-47cc-b329-9cc140a184e1",
+              "name": "PositionTitle",
+              "value": "={{ $('Code4').item.json.PositionTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "03dc2810-56b4-4183-83db-58628c109d40",
+              "name": "ExperienceRequired",
+              "value": "={{ $('Code4').item.json.ExperienceRequired }}",
+              "type": "string"
+            },
+            {
+              "id": "a3ac5d54-f5e7-4f1f-8310-c3854b3aa4cf",
+              "name": "RequiredSkillsAndExperience",
+              "value": "={{ $('Code4').item.json.RequiredSkillsAndExperience }}",
+              "type": "string"
+            },
+            {
+              "id": "f98066d3-8782-437f-877a-80266e27ccd2",
+              "name": "KeyResponsibilities",
+              "value": "={{ $('Code4').item.json.KeyResponsibilities }}",
+              "type": "string"
+            },
+            {
+              "id": "3d2348bc-517e-4458-94b0-7b5b220625ed",
+              "name": "NiceToHaveSkills",
+              "value": "={{ $('Code4').item.json.NiceToHaveSkills }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3968,
+        688
+      ],
+      "id": "c8c064e5-7d6f-4dd5-80e6-2c83299c4375",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Given the above info, create a information base that can be passed on to other LLM agent. skip the informationo that is undefined but include that is defined.\n\n\ntitle = {{ $json.title }}\nlink = {{ $json.link }}\nsnippet = {{ $json.snippet }}\nperson_jobTitle = {{ $json.person_jobTitle }}\norganization = {{ $json.organization }}\ncompany_name = {{ $json.CompanyName }}\nposition_title = {{ $json.PositionTitle }}\nexperience_required = {{ $json.ExperienceRequired }}\nrequired_skills_and_experience = {{ $json.RequiredSkillsAndExperience }}\nkey_responsibilities = {{ $json.KeyResponsibilities }}\nnice_to_have_skills = {{ $json.NiceToHaveSkills }}\n\n\nnow create a knowledge base and focus on skills and techstack rather than personal Information.\nKeep the output clean in plain text, do not use any symbols, ticks, json tags {} braces or anything, use - for seperation if needed and comma for internal seperation.\nDO NOT provide any annotation or starting text. keep the language plain and without any symbols.\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -3744,
+        688
+      ],
+      "id": "9b86c9df-37f2-4c6c-b183-ad07553cafa5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      knowledge_bases: items.map(item => item.json.output)\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3392,
+        688
+      ],
+      "id": "7d37ce70-8b9f-45a9-bcf3-2d76bc521bf3",
+      "name": "Convert json -> plainText"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert technical recruiter and assessment designer.\n\nBelow is a structured list of candidate profiles in raw format, including their experience, education, certifications, skills, GitHub links, and self-descriptions (\"about\" sections). Use this information to:\n\nIdentify the overall domain that fits all the profiles best (e.g., \"Full Stack Development\", \"Software Engineering\").\n\nAssign a dynamic difficulty level (Beginner, Intermediate, Advanced) based on their combined experience and expertise.\n\nCreate a 30 question multiple-choice technical test (1 correct answer per question).\n\nEnsure the questions test core skills, reasoning, and applied knowledge relevant to the domain.\n\nUse information from experience, projects, certifications, and \"about\" sections to customize the topics accordingly.\n\nThe test should not be generic — it must reflect the candidates’ real-world skills, such as MERN stack, DevOps, Java Full Stack, backend/frontend logic, software development lifecycle, or tools like AWS, Git, etc.\n\nInclude a few scenario-based or real-world debugging questions where appropriate.\n\nOutput Format:\n\n{\n  \"testTitle\": \"<Auto-generated based on job domain>\",\n  \"difficulty\": \"<Beginner | Intermediate | Advanced>\",\n  \"questions\": [\n    {\n      \"question\": \"<Question>\",\n      \"options\": [\"A\", \"B\", \"C\", \"D\"],\n      \"correctAnswer\": \"A\"\n    },\n    ...\n  ]\n}\n\nHere are the profiles:\n{{ $json.knowledge_bases }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        -3168,
+        688
+      ],
+      "id": "1f0334ae-8e97-45f8-9854-e4aa40a44cc8",
+      "name": "Prompt Creation for QnA"
+    },
+    {
+      "parameters": {
+        "jsCode": "function parseTestPaperForGoogleForm(llmResponse) {\n  try {\n    // Extract raw string (from LLM response array)\n    let rawOutput = llmResponse[0]?.output || \"\";\n\n    // Remove unwanted wrappers like ```json, ```, and extra text before/after JSON\n    let jsonStr = rawOutput\n      .replace(/```json\\s*|\\s*```/g, '')   // remove code fences\n      .trim();\n\n    // Try to extract only the JSON part if extra text is around\n    const firstBrace = jsonStr.indexOf(\"{\");\n    const lastBrace = jsonStr.lastIndexOf(\"}\");\n    if (firstBrace !== -1 && lastBrace !== -1) {\n      jsonStr = jsonStr.substring(firstBrace, lastBrace + 1);\n    }\n\n    // Parse JSON safely\n    const data = JSON.parse(jsonStr);\n\n    // Validate required fields\n    if (!data.testTitle || !data.difficulty || !Array.isArray(data.questions)) {\n      throw new Error(\"Invalid input structure: Missing required fields (testTitle, difficulty, or questions)\");\n    }\n\n    // Validate and filter questions\n    const validQuestions = data.questions.filter(q =>\n      typeof q.question === 'string' && q.question.trim() !== '' &&\n      Array.isArray(q.options) && q.options.length > 0 && q.options.every(opt => typeof opt === 'string' && opt.trim() !== '') &&\n      typeof q.correctAnswer === 'string' && q.correctAnswer.trim() !== ''\n    );\n\n    if (validQuestions.length === 0) {\n      throw new Error(\"No valid questions found in input\");\n    }\n\n    // Build Google Form payload\n    const googleFormPayload = {\n      info: {\n        title: data.testTitle,\n        documentTitle: data.testTitle,\n        description: `A ${data.difficulty} level assessment for ${data.testTitle}`\n      },\n      items: validQuestions.map((question, index) => ({\n        questionItem: {\n          title: question.question,\n          question: {\n            required: true,\n            choiceQuestion: {\n              type: 'RADIO',\n              options: question.options.map(option => ({ value: option })),\n              shuffle: true\n            },\n            grading: {\n              pointValue: 1,\n              correctAnswers: {\n                answers: [{ value: question.correctAnswer }]\n              }\n            },\n            questionId: `q${index + 1}`\n          }\n        }\n      }))\n    };\n\n    return [{ json: googleFormPayload }];\n  } catch (error) {\n    return [{\n      json: {\n        error: `Failed to generate Google Form payload: ${error.message}`,\n        rawResponse: llmResponse[0]?.output || null\n      }\n    }];\n  }\n}\n\nreturn parseTestPaperForGoogleForm($input.all().map(item => item.json));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2816,
+        688
+      ],
+      "id": "c0926394-645c-43d5-8357-c0b9865cc236",
+      "name": "json -> QNA Schema"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"info\": {\n    \"title\": \"{{ $json.info.title }}\",\n    \"documentTitle\": \"{{ $json.info.documentTitle }}\",\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2592,
+        688
+      ],
+      "id": "82ffc74f-b268-413f-9604-935efa3304b6",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "850677b1-5fe2-42bb-aa70-2e2696b34f6c",
+              "name": "items",
+              "value": "={{ $('json -> QNA Schema').item.json.items }}",
+              "type": "array"
+            },
+            {
+              "id": "c514782b-6635-43e5-a57a-82e664376a06",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2144,
+        768
+      ],
+      "id": "5b823aa5-7c69-488a-b081-2b0a3f183ed6",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://forms.googleapis.com/v1/forms/{{ $('Creating Form').item.json.formId }}:batchUpdate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"updateFormInfo\": {\n        \"info\": {\n          \"description\": \"{{ $('json -> QNA Schema').item.json.info.description }}\"\n        },\n        \"updateMask\": \"description\"\n      }\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1472,
+        768
+      ],
+      "id": "cd7a9c96-b018-49be-a5be-b6c9b0f329ae",
+      "name": "HTTP Request",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "GAcnEJljUCUsGf4E",
+          "name": "google from"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\n\nconst options = {\n  timeZone: 'Asia/Kolkata',\n  hour12: false,\n};\n\nconst istDate = new Intl.DateTimeFormat('en-CA', {\n  ...options,\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit',\n}).format(now);\n\nconst istTime = new Intl.DateTimeFormat('en-GB', {\n  ...options,\n  hour: '2-digit',\n  minute: '2-digit',\n  second: '2-digit',\n}).format(now);\n\nconst formatted = `${istDate}T${istTime}:Asia/Kolkata`;\n\nreturn [\n  {\n    json: {\n      ist_custom_format: formatted\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1248,
+        768
+      ],
+      "id": "bb922721-1974-4c91-85c6-63b37eb453c5",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://forms.googleapis.com/v1/forms/{{ $('Creating Form').item.json.formId }}:batchUpdate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1696,
+        768
+      ],
+      "id": "6be99576-4f7f-4fab-9ee1-805babceec67",
+      "name": "Addiing QnA",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "GAcnEJljUCUsGf4E",
+          "name": "google from"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://forms.googleapis.com/v1/forms",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2368,
+        688
+      ],
+      "id": "bfea287d-693a-4f95-b003-901fa0c1d2a6",
+      "name": "Creating Form",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "GAcnEJljUCUsGf4E",
+          "name": "google from"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $json.spreadsheetId }}:batchUpdate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"updateCells\": {\n        \"rows\": [\n          {\n            \"values\": [\n              { \"userEnteredValue\": { \"stringValue\": \"First Name\" } },\n              { \"userEnteredValue\": { \"stringValue\": \"Last Name\" } },\n              { \"userEnteredValue\": { \"stringValue\": \"Email\" } },\n              { \"userEnteredValue\": { \"stringValue\": \"LinkedinURL\" } },\n              { \"userEnteredValue\": { \"stringValue\": \"Score\" } },\n              { \"userEnteredValue\": { \"stringValue\": \"Mobile Number\" } }\n            ]\n          }\n        ],\n        \"fields\": \"userEnteredValue\",\n        \"start\": {\n          \"sheetId\": {{ $json.sheets[0].properties.sheetId }},\n          \"rowIndex\": 0,\n          \"columnIndex\": 0\n        }\n      }\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -320,
+        768
+      ],
+      "id": "2ddd4e35-05c6-4d7d-9c34-6bc9009867ec",
+      "name": "Creating column",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "RD7ZyGkPDGqBSzEz",
+          "name": "google sheet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $json.spreadsheetId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -608,
+        768
+      ],
+      "id": "d304792a-ac5d-4a4d-8ab9-3eaf58176081",
+      "name": "HTTP Request2",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "RD7ZyGkPDGqBSzEz",
+          "name": "google sheet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function parseEmailContent(rawText) {\n  const splitIndex = rawText.indexOf(',');\n  if (splitIndex === -1) {\n    throw new Error(\"Invalid input format: expected a comma separating subject and body.\");\n  }\n\n  const subject = rawText.substring(0, splitIndex).trim();\n  let body = rawText.substring(splitIndex + 1).trim();\n\n  // Insert line breaks after periods followed by space for readability\n  body = body.replace(/\\. +/g, '.\\n');\n\n  return {\n    subject,\n    body\n  };\n}\n\nconst rawText = $input.first().json.output;\n\nconst parsed = parseEmailContent(rawText);\n\n// ✅ Wrap result properly for n8n\nreturn [\n  {\n    json: parsed\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        752
+      ],
+      "id": "3ffc9996-c1e2-413d-b370-9d4a4204904f",
+      "name": "Mail Formatting"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\n\nconst options = {\n  timeZone: 'Asia/Kolkata',\n  hour12: false,\n};\n\nconst istDate = new Intl.DateTimeFormat('en-CA', {\n  ...options,\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit',\n}).format(now);\n\nconst istTime = new Intl.DateTimeFormat('en-GB', {\n  ...options,\n  hour: '2-digit',\n  minute: '2-digit',\n  second: '2-digit',\n}).format(now);\n\nconst formatted = `${istDate}T${istTime}:Asia/Kolkata`;\n\nreturn [\n  {\n    json: {\n      ist_custom_format: formatted\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        720
+      ],
+      "id": "5df3b46a-2705-4789-80ab-4b02c96d60e2",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "sendTo": "=jiteshbawaskar07@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2368,
+        672
+      ],
+      "id": "020920ad-fbf1-40d8-baad-6780a60a975d",
+      "name": "Send a message",
+      "webhookId": "b4fea330-5fb3-4c60-a9ff-2f7b9eb0be5c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ToaQnH63pyxlFIS",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Copy\nEdit\n<subject>, <body>\nInputs:\nFull Name: {{ $json.fullName }}\nJob Description: {{ $json.job_description }}\nForm Link: {{ $json.responderUri }}\n\nPrompt:\nYou are an HR representative drafting a professional outreach email to potential candidates after reviewing their LinkedIn profiles.\n\nInstructions:\n- Begin with \"Dear candidate,\" followed by a formal introduction that clearly states you are the HR at the company mentioned in the Job Description.\n- Use the Job Description to summarize the role with:\n  • Position title  \n  • Department  \n  • Work mode (Onsite/Remote/Hybrid)  \n  • Location  \n  • Key skills required  \n  • Main responsibilities  \n- Keep the tone strictly professional, respectful, and neutral. Avoid casual phrases, exaggeration, or unnecessary friendliness.\n- End with a clear and polite call to action:  \n  “If you are interested, you may take a short technical assessment here: [Form Link]”.\n- Close the email with this signature block:  \n  Sincerely,  \n  {{ $json.fullName }}\n- Do not add bullet points, emojis, formatting, or extra personalization.\n- The subject line must be concise and role-specific in this format:  \n  “Opportunity for [PositionTitle] at [CompanyName extracted from Job Description]”.\n- Output format must be exactly:  \n  <subject>, <body>\n\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1568,
+        752
+      ],
+      "id": "449fbbd3-e161-4aee-bdc1-7c5bc64f3d76",
+      "name": "AI Agent4"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert job description writer. Based on the provided structured fields, create a clear, detailed, and professional job description. Do not skip or lose any data. Ensure the description flows naturally, but keep all given fields included.\n\nData fields to use:\n\nCompany Name = {{ $json.CompanyName }}\nPosition Title = {{ $json.PositionTitle }}\nDepartment = {{ $json.Department }}\nJob Type = {{ $json.JobType }}\nWork Mode = {{ $json.WorkMode }}\nLocation = {{ $json.Location }}\nExperience Required = {{ $json.ExperienceRequired }}\nHiring Urgency = {{ $json.HiringUrgency }}\nMinimum Salary = {{ $json.MinimumSalary }}\nMaximum Salary = {{ $json.MaximumSalary }}\nBenefits and Perks = {{ $json.BenefitsAndPerks }}\nEducation Requirements = {{ $json.EducationRequirements }}\nRequired Skills and Experience = {{ $json.RequiredSkillsAndExperience }}\nKey Responsibilities = {{ $json.KeyResponsibilities }}\nNice to Have Skills = {{ $json.NiceToHaveSkills }}\nCompany Description and Mission = {{ $json.CompanyDescriptionAndMission }}\n\nInstructions:\n\nBegin with the Position Title and Company Name.\n\nWrite a short overview paragraph using Company Description and Mission.\n\nAdd a Role Summary mentioning Department, Job Type, Work Mode, and Location.\n\nClearly define Responsibilities and Required Skills & Experience.\n\nAdd Education Requirements.\n\nHighlight Nice-to-Have Skills.\n\nInclude Salary Range (Minimum and Maximum Salary), Benefits and Perks, and Hiring Urgency.\n\nEnd with a motivational closing line encouraging candidates to apply.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -96,
+        -32
+      ],
+      "id": "2349adbe-5f8d-4324-991c-529f926e64c4",
+      "name": "AI Agent5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "330aa8bf-272f-48a8-9fdb-a9b4aff0f877",
+              "name": "job_description",
+              "value": "={{ $json.plainText.job_description }}",
+              "type": "string"
+            },
+            {
+              "id": "a93e1d26-5c0b-4576-be80-24cdc308d54f",
+              "name": "responderUri",
+              "value": "={{ $json.plainText.responderUri }}",
+              "type": "string"
+            },
+            {
+              "id": "6dec4069-ec93-40f8-9c9d-938625002d8b",
+              "name": "fullName",
+              "value": "={{ $('Code4').item.json.fullName }}",
+              "type": "string"
+            },
+            {
+              "id": "77e24997-604a-4b5d-bb3c-d147dea55481",
+              "name": "plainText.formId",
+              "value": "={{ $json.plainText.formId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        752
+      ],
+      "id": "40a61204-e8a2-41ca-a0fd-7dfaefa04dfb",
+      "name": "check jd and from"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      job_description: $input.first().json.output\n        ? $input.first().json.output.replace(/\"/g, '\\\\\"').replace(/\\r?\\n/g, \" \")\n        : \"\"\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        80
+      ],
+      "id": "deaa0adf-eaf4-4d25-8004-89f5c1fd789c",
+      "name": "Code9"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        720,
+        528
+      ],
+      "id": "f7caea06-9027-44d3-b60a-89a5e1d72adc",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map(item => item.json);\n\n// Merge all objects into one\nlet merged = {};\nfor (const obj of items) {\n  for (const key in obj) {\n    if (obj[key] !== null && obj[key] !== undefined) {\n      merged[key] = obj[key]; // keep only non-null values\n    }\n  }\n}\n\n// Return as a single row\nreturn [{ json: merged }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        752
+      ],
+      "id": "e3b727f3-f7d0-4c72-8afd-f88d916e2d83",
+      "name": "Code8"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -32,
+        688
+      ],
+      "id": "a3e05380-6278-4a61-8b3f-71642ba53dbe",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.all();\n\nif (!input || input.length === 0) {\n  return [{ json: { error: \"No input data\" } }];\n}\n\nconst formNode = input[0]?.json;\nconst sheetNode = input[1]?.json;\n\nconst mergedRow = {\n  formId: formNode?.formId || null,\n  title: formNode?.info?.title || null,\n  documentTitle: formNode?.info?.documentTitle || null,\n  emailCollectionType: formNode?.settings?.emailCollectionType || null,\n  revisionId: formNode?.revisionId || null,\n  responderUri: formNode?.responderUri || null,\n  isPublished: formNode?.publishSettings?.publishState?.isPublished || null,\n  isAcceptingResponses: formNode?.publishSettings?.publishState?.isAcceptingResponses || null,\n  spreadsheetId: sheetNode?.spreadsheetId || null\n};\n\nreturn [{ json: mergedRow }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        688
+      ],
+      "id": "b4da151d-ab30-4ce1-befc-63c61b6e9c68",
+      "name": "Code10"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  return { json: { plainText: item.json } }\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        752
+      ],
+      "id": "a80675e3-2c42-4925-aa8a-5628d16cf187",
+      "name": "Code11"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2144,
+        752
+      ],
+      "id": "939ac832-f5e2-4c3d-aea8-a764df19cea3",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input: items array from previous node (your sheet data)\nconst emails = items.map(item => item.json.email);\n\n// Option 1: Return all emails as an array\nreturn [\n  {\n    json: {\n      emails_array: emails\n    }\n  }\n];\n\n// Option 2: Return all emails as a comma-separated string\n// return [\n//   {\n//     json: {\n//       emails_string: emails.join(\", \")\n//     }\n//   }\n// ];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1728,
+        320
+      ],
+      "id": "a6df3f98-fedc-404e-bb6b-6244235a1635",
+      "name": "Code12"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        2736,
+        320
+      ],
+      "id": "7452c308-b427-4ac8-8187-8afb3e804659",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/12xDq4BvuXsoRTUHcuuD_y9xHDNEaylS43bzehemy_wA/edit?gid=69448041#gid=69448041",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 69448041,
+          "mode": "list",
+          "cachedResultName": "final data mail send to canticate ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12xDq4BvuXsoRTUHcuuD_y9xHDNEaylS43bzehemy_wA/edit#gid=69448041"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "E-mails"
+          ],
+          "schema": [
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3296,
+        32
+      ],
+      "id": "a32f90d6-131c-4e37-afb7-15b02d34eb8d",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xrdosEs5Ytpv9Btt",
+          "name": "Google Sheets account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3b96832b-f31c-45c7-98e2-afb70149e1c1",
+              "name": "emails_array",
+              "value": "={{ $json.emails_array }}",
+              "type": "array"
+            },
+            {
+              "id": "1afe2b6c-ce5c-471c-b6df-d1c2755ffc21",
+              "name": "fullName",
+              "value": "={{ $json.fullName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2848,
+        32
+      ],
+      "id": "4b284836-0601-4edd-8054-46909b5b2875",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node\n// Convert emails_array into multiple rows with single column \"email\"\n// Remove \"N/A\" or blank entries\n\nconst emails = items[0].json.emails_array || [];\n\nreturn emails\n  .filter(email => email && email !== \"N/A\") // keep only valid emails\n  .map(email => {\n    return {\n      json: {\n        email: email\n      }\n    };\n  });\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3072,
+        32
+      ],
+      "id": "ae403377-1bee-4cea-b74b-5f5439bf236b",
+      "name": "Code13"
+    },
+    {
+      "parameters": {
+        "jsCode": "function cleanOptionValue(value) {\n  // Remove letter prefix like \"A) \" or \"E) \" and trim\n  return value.replace(/^[A-Z]\\)\\s*/, '').trim();\n}\n\nfunction mapCorrectAnswer(letter, options) {\n  // Convert letter to index dynamically (A=0, B=1, ...)\n  const index = letter.toUpperCase().charCodeAt(0) - 65;\n  if (index < 0 || index >= options.length || !options[index]) {\n    console.warn(`Warning: Invalid correct answer letter \"${letter}\" for options length ${options.length}`);\n    return options[0] ? cleanOptionValue(options[0].value) : '';\n  }\n  return cleanOptionValue(options[index].value);\n}\n\nfunction generateGoogleFormPayload(input) {\n  const questions = input.items;\n  if (!questions || !Array.isArray(questions)) {\n    console.warn('Warning: Input does not contain a valid items array');\n    return { requests: [] };\n  }\n\n  const requests = [\n    // Enable quiz settings\n    {\n      updateSettings: {\n        settings: {\n          quizSettings: { isQuiz: true }\n        },\n        updateMask: \"quizSettings.isQuiz\"\n      }\n    },\n    // Full Name field at index 0\n    {\n      createItem: {\n        item: {\n          title: \"Full Name\",\n          questionItem: {\n            question: {\n              required: true,\n              textQuestion: { paragraph: false }\n            }\n          }\n        },\n        location: { index: 0 }\n      }\n    },\n    // Email field at index 1\n    {\n      createItem: {\n        item: {\n          title: \"Email Address\",\n          questionItem: {\n            question: {\n              required: true,\n              textQuestion: { paragraph: false }\n            }\n          }\n        },\n        location: { index: 1 }\n      }\n    },\n    // Mobile Number field at index 2\n    {\n      createItem: {\n        item: {\n          title: \"Mobile Number\",\n          questionItem: {\n            question: {\n              required: true,\n              textQuestion: { paragraph: false }\n            }\n          }\n        },\n        location: { index: 2 }\n      }\n    },\n    // Quiz questions starting at index 3\n    ...questions.map((item, index) => {\n      const { title, question } = item.questionItem;\n      const { choiceQuestion, grading, required } = question;\n      const cleanedOptions = choiceQuestion.options.map(opt => ({\n        value: cleanOptionValue(opt.value)\n      }));\n      const correctAnswer = mapCorrectAnswer(\n        grading.correctAnswers.answers[0].value,\n        choiceQuestion.options\n      );\n\n      return {\n        createItem: {\n          item: {\n            title: title,\n            questionItem: {\n              question: {\n                required: required,\n                choiceQuestion: {\n                  type: choiceQuestion.type,\n                  options: cleanedOptions,\n                  shuffle: choiceQuestion.shuffle\n                },\n                grading: {\n                  pointValue: grading.pointValue,\n                  correctAnswers: { answers: [{ value: correctAnswer }] }\n                }\n              }\n            }\n          },\n          location: { index: index + 3 } // shift by 3 now\n        }\n      };\n    })\n  ];\n\n  return { requests };\n}\n\nfunction main() {\n  const firstItem = $input.first();\n  const input = firstItem?.json;\n\n  if (!input?.items || !Array.isArray(input.items)) {\n    console.warn('Warning: No valid input data or items array provided');\n    return [{ json: { requests: [] } }];\n  }\n\n  const payload = generateGoogleFormPayload(input);\n  return [{ json: payload }];\n}\n\nreturn main();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1920,
+        768
+      ],
+      "id": "539e2e1e-f505-41ee-9cce-9c2f6b744702",
+      "name": "create from structure"
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "={{ $('Creating Form').item.json.info.title }}_{{ $json.ist_custom_format }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -960,
+        768
+      ],
+      "id": "a8059dc5-7e23-4aa8-a0b3-3af5adc3ce03",
+      "name": "Create spreadsheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xrdosEs5Ytpv9Btt",
+          "name": "Google Sheets account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        144
+      ],
+      "id": "cc1b2347-27c5-4eef-9c38-d349342e50f7",
+      "name": "Google Gemini Chat Model6",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "o7FjoRTzQf9DuQqg",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1024,
+        448
+      ],
+      "id": "54443b98-2c5c-48e5-a796-6f48fd61f4e8",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "o7FjoRTzQf9DuQqg",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        432
+      ],
+      "id": "34ced4e1-2dd4-4913-8373-ade3ad91dd46",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "3yJ4gqe66PUUwxo1",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        928
+      ],
+      "id": "60a17944-e369-411a-97dc-f3d1711dc1dc",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "a4bcqQwEueptND0l",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3744,
+        864
+      ],
+      "id": "3027ac03-f6a3-4748-bce2-233582ff422e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "KHmQhIikBN99g9SI",
+          "name": "Google Gemini(PaLM) Api account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3168,
+        848
+      ],
+      "id": "4d222990-c873-4aa6-a1d1-9c17803ad7eb",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "a4bcqQwEueptND0l",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "localhost:5678",
+            "user-agent": "python-requests/2.31.0",
+            "accept-encoding": "gzip, deflate, zstd",
+            "accept": "*/*",
+            "connection": "keep-alive",
+            "content-length": "941",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "CompanyName": "tata ",
+            "CompanyWebsite": "https://www.tatamotors.com",
+            "CompanyAddress": "Indore",
+            "CompanyIndustry": "IT",
+            "CompanyDescriptionAndMission": "nothing ",
+            "CompanyCultureAndValues": "nothing ",
+            "fullName": "jitesh bawaskar ",
+            "hrTitle": "telent aquasitoon ",
+            "hrEmail": "jiteshbawaskar05@gmail.com",
+            "hrPhone": "8602333400",
+            "hrLinkedIn": "https://github.com/Jitesh52142",
+            "preferredTimezone": "aisa ",
+            "PositionTitle": "data enginear",
+            "Department": "Engineering",
+            "JobType": "Full-time",
+            "WorkMode": "On-site",
+            "Location": "indore ",
+            "ExperienceRequired": "1-3 Years",
+            "HiringUrgency": "Immediate",
+            "ExpectedStartDate": "2025-07-04",
+            "Currency": "INR",
+            "MinimumSalary": "52000",
+            "MaximumSalary": "5200000",
+            "EducationRequirements": "Bachelor's Degree",
+            "RequiredSkillsAndExperience": "python ",
+            "KeyResponsibilities": "update app ",
+            "submitted_by": "jiteshbawaskar05@gmail.com",
+            "submitted_at": "2025-08-19T17:59:27.461908"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/48edfceb-6f2e-45f6-8147-6e49064f7626",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code6": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Code12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Convert json -> plainText",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert json -> plainText": {
+      "main": [
+        [
+          {
+            "node": "Prompt Creation for QnA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt Creation for QnA": {
+      "main": [
+        [
+          {
+            "node": "json -> QNA Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Creating Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "json -> QNA Schema": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "create from structure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Addiing QnA": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creating Form": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creating column": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Creating column",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail Formatting": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent4": {
+      "main": [
+        [
+          {
+            "node": "Mail Formatting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent5": {
+      "main": [
+        [
+          {
+            "node": "Code9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check jd and from": {
+      "main": [
+        [
+          {
+            "node": "Code8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code9": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code11",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Code8": {
+      "main": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code10": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Code11": {
+      "main": [
+        [
+          {
+            "node": "check jd and from",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code12": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Code13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code13": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create from structure": {
+      "main": [
+        [
+          {
+            "node": "Addiing QnA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create spreadsheet": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Prompt Creation for QnA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "61be009b-0f3e-4b36-923c-7b8d2978fbbf",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ce2a83b43bc09355943fe54e5fd83807f3315cccf5af5bfc9ef7def1278471f1"
+  },
+  "id": "Sin0naq11SrH5y9T",
+  "tags": []
+}
